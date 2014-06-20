@@ -31,13 +31,13 @@ class ViewPlayer : public video::IShaderConstantSetCallBack
         void render3D();
 
     private:
+        IrrlichtDevice *m_device;
         int m_nbPlayers;
-        int m_height;
         int m_width;
+        int m_height;
 
 
         video::ITexture *m_textures[8];
-        IrrlichtDevice *m_device;
         video::SMaterial m_material;
 
         struct Quad { video::S3DVertex v0, v1, v2, v3; };
