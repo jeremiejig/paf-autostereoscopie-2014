@@ -48,6 +48,7 @@ src/graphics/show_curve.cpp
 src/graphics/skid_marks.cpp
 src/graphics/slip_stream.cpp
 src/graphics/stars.cpp
+src/graphics/view_player.cpp
 src/guiengine/abstract_state_manager.cpp
 src/guiengine/abstract_top_level_container.cpp
 src/guiengine/CGUISpriteBank.cpp
@@ -296,6 +297,7 @@ src/graphics/show_curve.hpp
 src/graphics/skid_marks.hpp
 src/graphics/slip_stream.hpp
 src/graphics/stars.hpp
+src/graphics/view_player.hpp
 src/guiengine/abstract_state_manager.hpp
 src/guiengine/abstract_top_level_container.hpp
 src/guiengine/engine.hpp
