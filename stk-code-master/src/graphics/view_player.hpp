@@ -30,6 +30,10 @@ class ViewPlayer : public video::IShaderConstantSetCallBack
 
         void render3D();
 
+        void beginCapture(int views);
+
+        void endCapture();
+
     private:
         IrrlichtDevice *m_device;
         int m_nbPlayers;
@@ -44,7 +48,7 @@ class ViewPlayer : public video::IShaderConstantSetCallBack
 
         /** The vertices for the rectangle used for each camera. This includes
          *  the vertex position, normal, and texture coordinate. */
-        std::vector<Quad> m_vertices;
+        Quad m_vertices;
 
 };
 
