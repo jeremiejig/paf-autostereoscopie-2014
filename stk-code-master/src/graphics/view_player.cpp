@@ -47,7 +47,7 @@ ViewPlayer::ViewPlayer(IrrlichtDevice *device, int nbPlayers, int width, int hei
     }
     m_material.Wireframe = false;
     m_material.Lighting = false;
-    m_material.ZWriteEnable = false;
+    m_material.ZWriteEnable = true;
 
 }
 
