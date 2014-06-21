@@ -21,6 +21,10 @@ data/.svn
 # Ignore doxygen output
 src/html
 
+# Ignore eclipse project file
+.project
+.cproject
+
 *.o
 *.d
 *.a
