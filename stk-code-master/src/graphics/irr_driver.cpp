@@ -26,6 +26,7 @@
 #include "graphics/per_camera_node.hpp"
 #include "graphics/post_processing.hpp"
 #include "graphics/referee.hpp"
+#include "graphics/view_player.hpp"
 #include "guiengine/engine.hpp"
 #include "guiengine/modaldialog.hpp"
 #include "guiengine/scalable_font.hpp"
@@ -112,6 +113,7 @@ IrrDriver::~IrrDriver()
     // is deleted, it will trigger the actual deletion of
     // PostProcessing when decreasing the refcount of its callback object.
     m_post_processing->drop();
+    m_view_player->drop();
     assert(m_device != NULL);
 
     m_device->drop();
@@ -125,6 +127,7 @@ IrrDriver::~IrrDriver()
 void IrrDriver::reset()
 {
     m_post_processing->reset();
+    m_view_player->reset();
 }   // reset
 
 // ----------------------------------------------------------------------------
@@ -466,6 +469,9 @@ void IrrDriver::initDevice()
 
     // Initialize post-processing if supported
     m_post_processing = new PostProcessing(m_video_driver);
+
+    // Initialize multi view rendering.
+    m_view_player = new ViewPlayer(m_device, 2, UserConfigParams::m_width, UserConfigParams::m_height);
 
     // set cursor visible by default (what's the default is not too clearly documented,
     // so let's decide ourselves...)

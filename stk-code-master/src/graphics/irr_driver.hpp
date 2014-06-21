@@ -53,6 +53,7 @@ class AbstractKart;
 class Camera;
 class PerCameraNode;
 class PostProcessing;
+class ViewPlayer;
 
 /**
   * \brief class that creates the irrLicht device and offers higher-level
@@ -74,6 +75,8 @@ private:
     gui::IGUIFont              *m_race_font;
     /** Post-processing. */
     PostProcessing             *m_post_processing;
+    /** Multi Views Rendering for 3D screen (PAF) */
+    ViewPlayer                 *m_view_player;
 
     /** Additional details to be shown in case that a texture is not found.
      *  This is used to specify details like: "while loading kart '...'" */
