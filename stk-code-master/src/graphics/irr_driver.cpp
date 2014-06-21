@@ -1665,7 +1665,8 @@ void IrrDriver::update(float dt)
         // Start the RTT for post-processing.
         // We do this before beginScene() because we want to capture the glClear()
         // because of tracks that do not have skyboxes (generally add-on tracks)
-        m_post_processing->beginCapture();
+        //PAF desactivation du post_processing (code pour écran partagé.)
+        //m_post_processing->beginCapture();
     }
 
     m_video_driver->beginScene(/*backBuffer clear*/ true, /*zBuffer*/ true,
@@ -1682,6 +1683,7 @@ void IrrDriver::update(float dt)
 
         for(unsigned int i=0; i<Camera::getNumCameras(); i++)
         {
+            
             Camera *camera = Camera::getCamera(i);
 
 #ifdef ENABLE_PROFILER
@@ -1702,22 +1704,24 @@ void IrrDriver::update(float dt)
             // the bullet debug view.
             if (UserConfigParams::m_artist_debug_mode)
                 World::getWorld()->getPhysics()->draw();
-        }   // for i<world->getNumKarts()
+        
+        /** One loop to render one view.
+        //}   // for i<world->getNumKarts()
 
         // Stop capturing for the post-processing
-        m_post_processing->endCapture();
+        //m_post_processing->endCapture();
 
         // Render the post-processed scene
-        m_post_processing->render();
+        //m_post_processing->render();
 
         // Set the viewport back to the full screen for race gui
         m_video_driver->setViewPort(core::recti(0, 0,
                                                 UserConfigParams::m_width,
                                                 UserConfigParams::m_height));
 
-        for(unsigned int i=0; i<Camera::getNumCameras(); i++)
-        {
-            Camera *camera = Camera::getCamera(i);
+        //for(unsigned int i=0; i<Camera::getNumCameras(); i++)
+        //{
+            Camera *camera = Camera::getCamera(i);*/
             char marker_name[100];
             sprintf(marker_name, "renderPlayerView() for kart %d", i);
 
