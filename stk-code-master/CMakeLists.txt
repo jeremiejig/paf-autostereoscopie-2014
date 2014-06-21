@@ -129,6 +129,10 @@ endif()
 find_package(OpenGL REQUIRED)
 include_directories(${OPENGL_INCLUDE_DIR})
 
+# Glew direct access for FBO (PAF)
+#find_package(GLEW REQUIRED)
+#include_directories(${GLEW_INCLUDE_DIR})
+
 if(UNIX AND NOT APPLE)
     find_library(IRRLICHT_XF86VM_LIBRARY Xxf86vm)
     mark_as_advanced(IRRLICHT_XF86VM_LIBRARY)
@@ -231,6 +235,7 @@ target_link_libraries(supertuxkart
     ${OGGVORBIS_LIBRARIES}
     ${IRRLICHT_XF86VM_LIBRARY}
     ${OPENAL_LIBRARY}
+    #${GLEW_LIBRARIES}
     ${OPENGL_LIBRARIES})
 
 if(APPLE)
