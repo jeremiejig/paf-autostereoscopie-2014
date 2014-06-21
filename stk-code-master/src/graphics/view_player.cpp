@@ -88,7 +88,7 @@ void ViewPlayer::reset()
         m_vertices.v2.Color  = m_vertices.v3.Color  = white;
 }
 
-void ViewPlayer::beginCapture(int views)
+void ViewPlayer::beginCapture(unsigned int views)
 {
     irr_driver->getVideoDriver()->setRenderTarget(m_textures[views],
                                                   true, true, 0);

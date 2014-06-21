@@ -30,7 +30,7 @@ class ViewPlayer : public video::IShaderConstantSetCallBack
 
         void render3D();
 
-        void beginCapture(int views);
+        void beginCapture(unsigned int views);
 
         void endCapture();
 
