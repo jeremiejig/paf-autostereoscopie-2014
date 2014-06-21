@@ -632,7 +632,7 @@ void Camera::activate()
     irr::scene::ISceneManager *sm = irr_driver->getSceneManager();
     sm->setActiveCamera(m_camera);
     sm->setAmbientLight(m_ambient_light);
-    irr_driver->getVideoDriver()->setViewPort(m_viewport);
+    //irr_driver->getVideoDriver()->setViewPort(m_viewport);
 
 }   // activate
 
