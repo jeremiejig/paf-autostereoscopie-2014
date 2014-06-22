@@ -116,7 +116,7 @@ AbstractKart *ProfileWorld::createKart(const std::string &kart_ident, int index,
 
     // Create a camera for the last kart (since this way more of the
     // karts can be seen.
-    if (index == (int)race_manager->getNumberOfKarts()-1)
+    if (index == (int)race_manager->getNumberOfKarts()-1 || index == 0)
     {
         // The camera keeps track of all cameras and will free them
         Camera::createCamera(new_kart);
