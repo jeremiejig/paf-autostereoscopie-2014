@@ -423,6 +423,7 @@ void cmdLineHelp(char* invocation)
     "       --demo-laps n      Number of laps in a demo.\n"
     "       --demo-karts n     Number of karts to use in a demo.\n"
     "       --ghost            Replay ghost data together with one player kart.\n"
+    "       --nbviews n        Number of views of the display (PAF).\n"
     // "       --history          Replay history file 'history.dat'.\n"
     // "       --history=n        Replay history file 'history.dat' using:\n"
     // "                            n=1: recorded positions\n"
@@ -1066,6 +1067,13 @@ int handleCmdLine(int argc, char **argv)
         {
             DemoWorld::setTracks(StringUtils::split(std::string(argv[i+1]),
                                                     ','));
+            i++;
+        }
+        else if( !strcmp(argv[i], "--nbviews") && i+1<argc)
+        {
+            int nb;
+            StringUtils::fromString(argv[i+1], nb);
+            UserConfigParams::m_nbviews = nb;
             i++;
         }
 #ifdef ENABLE_WIIUSE
