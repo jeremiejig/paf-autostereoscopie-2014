@@ -6,23 +6,21 @@
 
 #include <sstream>
 #include <cstring>
+#include <cmath>
 #include <string>
 
 // ShaderPath is for the pixel shader
-ViewPlayer::ViewPlayer(IrrlichtDevice *device, int nbPlayers, int width, int height)
-                                                                            :   m_device(device),
-                                                                                m_nbPlayers(nbPlayers),
-                                                                                m_width(width),
-                                                                                m_height(height)
+ViewPlayer::ViewPlayer(IrrlichtDevice *device, int nbViews):m_device(device), m_nbViews(nbViews)
 {
-    // We put 8 because the largest screen we use has 8 views
-    // All the views will not always be used
-    //m_textures = malloc(sizeof(void*)*8);
+    core::dimension2du screenSize = device->getVideoDriver()->getScreenSize();
 
-    for(int i = 0 ; i < 8 ; i++)
+    for(int i = 0 ; i < nbViews ; i++)
     {
-        m_textures[i] = m_device->getVideoDriver()->addRenderTargetTexture(core::dimension2d<u32>(width,height));
+        m_textures[i] = m_device->getVideoDriver()->addRenderTargetTexture(screenSize /= sqrt(nbViews));
+        beginCapture(i);
     }
+
+    endCapture();
 
     video::IGPUProgrammingServices* gpu = m_device->getVideoDriver()->getGPUProgrammingServices();
 
@@ -41,10 +39,11 @@ ViewPlayer::ViewPlayer(IrrlichtDevice *device, int nbPlayers, int width, int hei
 
     m_material.MaterialType = (video::E_MATERIAL_TYPE)interlacingShader;
 
-    for (int i = 0 ; i < m_nbPlayers ; i++)
+    for (int i = 0 ; i < m_nbViews ; i++)
     {
         m_material.setTexture(i,m_textures[i]);
     }
+
     m_material.Wireframe = false;
     m_material.Lighting = false;
     m_material.ZWriteEnable = true;
@@ -90,8 +89,7 @@ void ViewPlayer::reset()
 
 void ViewPlayer::beginCapture(unsigned int views)
 {
-    irr_driver->getVideoDriver()->setRenderTarget(m_textures[views],
-                                                  true, true, 0);
+    irr_driver->getVideoDriver()->setRenderTarget(m_textures[views], true, true, 0);
 }
 
 // ----------------------------------------------------------------------------
@@ -125,16 +123,16 @@ void ViewPlayer::render3D()
 //Est appelé automatiquement dans render3D
 void ViewPlayer::OnSetConstants(video::IMaterialRendererServices* services, s32 userData)
 {
-    int m_index[8];
-    //for(int i = 0 ; i < m_nbPlayers ; i++)
-    for(int i = 0 ; i < m_nbPlayers*2 ; i++)
+    int index[8];
+    //for(int i = 0 ; i < m_nbViews ; i++)
+    for(int i = 0 ; i < m_nbViews ; i++)
     {
         // The texture are named "tex0", "tex1"... in the shader
-        m_index[i]=i/2;
+        index[i]=i/2;
         std::ostringstream oss;
         oss << i;
         std::string iString = oss.str();
-        services->setPixelShaderConstant((std::string("tex") + iString).c_str() ,(&m_index[i]), 1);
+        services->setPixelShaderConstant((std::string("tex") + iString).c_str() ,(&index[i]), 1);
         /*oss << m_index[i];
         iString = oss.str();
         Log::info("shader tex", iString.c_str());*/

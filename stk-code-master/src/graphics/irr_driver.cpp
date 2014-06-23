@@ -471,7 +471,7 @@ void IrrDriver::initDevice()
     m_post_processing = new PostProcessing(m_video_driver);
 
     // Initialize multi view rendering.
-    m_view_player = new ViewPlayer(m_device, 2, UserConfigParams::m_width, UserConfigParams::m_height);
+    m_view_player = new ViewPlayer(m_device, 5);
 
     // set cursor visible by default (what's the default is not too clearly documented,
     // so let's decide ourselves...)
@@ -514,7 +514,7 @@ core::position2di IrrDriver::getMouseLocation()
 bool IrrDriver::moveWindow(const int x, const int y)
 {
 #ifdef WIN32
-    const video::SExposedVideoData& videoData = 
+    const video::SExposedVideoData& videoData =
                     m_video_driver->getExposedVideoData();
     // this should work even if using DirectX in theory,
     // because the HWnd is always third pointer in the struct,
@@ -1704,7 +1704,7 @@ void IrrDriver::update(float dt)
             // the bullet debug view.
             if (UserConfigParams::m_artist_debug_mode)
                 World::getWorld()->getPhysics()->draw();
-        
+
         /** One loop to render one view.
         //}   // for i<world->getNumKarts()
 
@@ -1937,7 +1937,7 @@ void IrrDriver::RTTProvider::setupRTTScene(PtrVector<scene::IMesh, REF>& mesh,
         m_rtt_main_node->getMaterial(n).SpecularColor.set(255,50,50,50);
         m_rtt_main_node->getMaterial(n).DiffuseColor.set(255,150,150,150);
 
-        m_rtt_main_node->getMaterial(n).setFlag(video::EMF_GOURAUD_SHADING , 
+        m_rtt_main_node->getMaterial(n).setFlag(video::EMF_GOURAUD_SHADING ,
                                                 true);
     }
 
