@@ -401,6 +401,9 @@ namespace UserConfigParams
     PARAM_PREFIX BoolUserConfigParam        m_fullscreen
             PARAM_DEFAULT(  BoolUserConfigParam(false, "fullscreen",
                                                 &m_video_group) );
+    PARAM_PREFIX IntUserConfigParam         m_nbviews
+            PARAM_DEFAULT(  IntUserConfigParam(5, "nbviews", &m_video_group,
+                                           "Number of views of the 3D screen") );
     PARAM_PREFIX IntUserConfigParam         m_prev_width
             PARAM_DEFAULT(  IntUserConfigParam(1024, "prev_width",
                             &m_video_group, "Previous screen/window width") );
@@ -410,6 +413,9 @@ namespace UserConfigParams
     PARAM_PREFIX BoolUserConfigParam        m_prev_fullscreen
             PARAM_DEFAULT(  BoolUserConfigParam(false, "prev_fullscreen",
                             &m_video_group) );
+    PARAM_PREFIX IntUserConfigParam         m_prev_nbviews
+            PARAM_DEFAULT(  IntUserConfigParam(5, "nbviews", &m_video_group,
+                                           "Number of views of the 3D screen") );
 
 
     PARAM_PREFIX BoolUserConfigParam        m_remember_window_location

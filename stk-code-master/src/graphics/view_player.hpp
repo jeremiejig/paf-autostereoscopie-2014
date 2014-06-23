@@ -16,7 +16,7 @@ using namespace irr;
 class ViewPlayer : public video::IShaderConstantSetCallBack
 {
     public:
-        ViewPlayer(IrrlichtDevice *device, int nbPlayers = 1, int width = 800, int height = 600);
+        ViewPlayer(IrrlichtDevice *device, int nbViews = 8);
 
         video::ITexture *getTexture(int playerIndex) {return m_textures[playerIndex];}
 
@@ -36,10 +36,7 @@ class ViewPlayer : public video::IShaderConstantSetCallBack
 
     private:
         IrrlichtDevice *m_device;
-        int m_nbPlayers;
-        int m_width;
-        int m_height;
-
+        int m_nbViews;
 
         video::ITexture *m_textures[8];
         video::SMaterial m_material;

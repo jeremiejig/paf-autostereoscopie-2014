@@ -267,9 +267,9 @@ void Camera::setupCamera()
                 fprintf(stderr, "Incorrect number of players: '%d' - assuming 1.\n",
                         race_manager->getNumLocalPlayers());*/
             m_viewport = core::recti(0, 0,
-                                     UserConfigParams::m_width,
-                                     UserConfigParams::m_height);
-            m_scaling  = core::vector2df(1.0f, 1.0f);
+                                     UserConfigParams::m_width/sqrt(UserConfigParams::m_nbviews),
+                                     UserConfigParams::m_height/sqrt(UserConfigParams::m_nbviews));
+            m_scaling  = core::vector2df(1.0/sqrt(2), 1.0/sqrt(2));
             m_fov      = DEGREE_TO_RAD*75.0f;
             break;
     }   // switch

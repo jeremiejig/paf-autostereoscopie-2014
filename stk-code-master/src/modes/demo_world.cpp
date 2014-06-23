@@ -135,7 +135,7 @@ bool DemoWorld::updateIdleTimeAndStartDemo(float dt)
         return false;
     }
 
-    StateManager::get()->enterGameState();
+    //StateManager::get()->enterGameState();
     race_manager->setNumLocalPlayers(2);
     InputDevice *device;
 

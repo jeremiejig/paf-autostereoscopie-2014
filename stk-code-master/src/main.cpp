@@ -422,7 +422,9 @@ void cmdLineHelp(char* invocation)
     "                          spaces are allowed in the track names.\n"
     "       --demo-laps n      Number of laps in a demo.\n"
     "       --demo-karts n     Number of karts to use in a demo.\n"
+    "       --demo-startrace   Skip the ready-set-go phase (everywhere).\n"
     "       --ghost            Replay ghost data together with one player kart.\n"
+    "       --nbviews n        Number of views of the display (PAF).\n"
     // "       --history          Replay history file 'history.dat'.\n"
     // "       --history=n        Replay history file 'history.dat' using:\n"
     // "                            n=1: recorded positions\n"
@@ -529,6 +531,13 @@ int handleCmdLinePreliminary(int argc, char **argv)
         else if( !strcmp(argv[i], "--kartdir") && i+1<argc )
         {
             KartPropertiesManager::addKartSearchDir(argv[i+1]);
+            i++;
+        }
+        else if( !strcmp(argv[i], "--nbviews") && i+1<argc)
+        {
+            int nb;
+            StringUtils::fromString(argv[i+1], nb);
+            UserConfigParams::m_nbviews = nb;
             i++;
         }
         else if( !strcmp(argv[i], "--no-graphics") || !strncmp(argv[i], "--list-", 7) ||
@@ -1068,6 +1077,10 @@ int handleCmdLine(int argc, char **argv)
                                                     ','));
             i++;
         }
+        else if ( !strcmp(argv[i], "--demo-startrace") )
+        {
+            UserConfigParams::m_race_now = true;
+        }
 #ifdef ENABLE_WIIUSE
         else if( !strcmp(argv[i], "--wii"))
         {
@@ -1096,6 +1109,7 @@ int handleCmdLine(int argc, char **argv)
         else if( !strcmp(argv[i], "--fullscreen") || !strcmp(argv[i], "-f")) {}
         else if( !strcmp(argv[i], "--windowed")   || !strcmp(argv[i], "-w")) {}
         else if( !strcmp(argv[i], "--version")    || !strcmp(argv[i], "-v")) {}
+        else if( !strcmp(argv[i], "--nbviews") && i+1<argc) { i++; }
 #ifdef __APPLE__
         // on OS X, sometimes the Finder will pass a -psn* something parameter
         // to the application
