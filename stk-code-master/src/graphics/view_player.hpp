@@ -16,27 +16,29 @@ using namespace irr;
 class ViewPlayer : public video::IShaderConstantSetCallBack
 {
     public:
-        ViewPlayer(IrrlichtDevice *device, int nbViews = 8);
-
-        video::ITexture *getTexture(int playerIndex) {return m_textures[playerIndex];}
-
-        virtual void OnSetConstants(video::IMaterialRendererServices* services, s32 userData);
-
-        video::SMaterial getProcessedTexture() {return m_material;}
+        ViewPlayer(IrrlichtDevice *device, int nbViews = 8, bool is3DOn = true, float interocularAngle = 0.1);
 
         virtual ~ViewPlayer();
+
+        video::ITexture *getTexture(int playerIndex) {return m_textures[playerIndex];}
+        video::SMaterial getProcessedTexture() {return m_material;}
+        float getInterocularAngle() {return m_interocularAngle;}
+        bool is3DOn() {return m_3DOn;}
+
+        virtual void OnSetConstants(video::IMaterialRendererServices* services, s32 userData);
 
         void reset();
 
         void render3D();
 
         void beginCapture(unsigned int views);
-
         void endCapture();
 
     private:
         IrrlichtDevice *m_device;
         int m_nbViews;
+        bool m_3DOn;
+        float m_interocularAngle;
 
         video::ITexture *m_textures[8];
         video::SMaterial m_material;

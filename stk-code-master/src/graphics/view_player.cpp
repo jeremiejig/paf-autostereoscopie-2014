@@ -11,7 +11,11 @@
 #include <string>
 
 // ShaderPath is for the pixel shader
-ViewPlayer::ViewPlayer(IrrlichtDevice *device, int nbViews):m_device(device), m_nbViews(nbViews)
+ViewPlayer::ViewPlayer(IrrlichtDevice *device, int nbViews, bool is3DOn, float interocularAngle) :
+                                                            m_device(device),
+                                                            m_nbViews(nbViews),
+                                                            m_3DOn(is3DOn),
+                                                            m_interocularAngle(interocularAngle)
 {
     core::dimension2du screenSize = device->getVideoDriver()->getScreenSize() / sqrt(nbViews);
 
@@ -48,7 +52,11 @@ ViewPlayer::ViewPlayer(IrrlichtDevice *device, int nbViews):m_device(device), m_
     m_material.Wireframe = false;
     m_material.Lighting = false;
     m_material.ZWriteEnable = true;
+}
 
+ViewPlayer::~ViewPlayer()
+{
+    //dtor
 }
 
 void ViewPlayer::reset()
@@ -144,10 +152,5 @@ void ViewPlayer::OnSetConstants(video::IMaterialRendererServices* services, s32 
     }
 
 
-}
-
-ViewPlayer::~ViewPlayer()
-{
-    //dtor
 }
 
