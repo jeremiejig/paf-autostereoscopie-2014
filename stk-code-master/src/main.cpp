@@ -422,6 +422,7 @@ void cmdLineHelp(char* invocation)
     "                          spaces are allowed in the track names.\n"
     "       --demo-laps n      Number of laps in a demo.\n"
     "       --demo-karts n     Number of karts to use in a demo.\n"
+    "       --demo-startrace   Skip the ready-set-go phase (everywhere).\n"
     "       --ghost            Replay ghost data together with one player kart.\n"
     "       --nbviews n        Number of views of the display (PAF).\n"
     // "       --history          Replay history file 'history.dat'.\n"
@@ -1068,6 +1069,10 @@ int handleCmdLine(int argc, char **argv)
             DemoWorld::setTracks(StringUtils::split(std::string(argv[i+1]),
                                                     ','));
             i++;
+        }
+        else if ( !strcmp(argv[i], "--demo-startrace") )
+        {
+            UserConfigParams::m_race_now = true;
         }
         else if( !strcmp(argv[i], "--nbviews") && i+1<argc)
         {
