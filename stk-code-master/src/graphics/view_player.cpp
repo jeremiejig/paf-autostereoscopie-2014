@@ -18,7 +18,6 @@ ViewPlayer::ViewPlayer(IrrlichtDevice *device, int nbViews):m_device(device), m_
     for(int i = 0 ; i < nbViews ; i++)
     {
         m_textures[i] = m_device->getVideoDriver()->addRenderTargetTexture(screenSize);
-        Log::info("ViewPlayer","%d %d",screenSize.Width,screenSize.Height);
         beginCapture(i);
     }
 
