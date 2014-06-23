@@ -190,6 +190,13 @@ namespace scene
 				IsOrthogonal = in->getAttributeAsBool("IsOrthogonal");
 		}
 
+		virtual void setInterocularDistance(float decalage)=0;
+
+		virtual float getInterocularDistance()=0;
+
+		virtual void setInterocularAngle(float angle)=0;
+
+		virtual float getInterocularAngle()=0;
 	protected:
 
 		void cloneMembers(ICameraSceneNode* toCopyFrom)

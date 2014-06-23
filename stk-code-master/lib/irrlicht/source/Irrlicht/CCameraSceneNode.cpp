@@ -63,6 +63,24 @@ void CCameraSceneNode::setProjectionMatrix(const core::matrix4& projection, bool
 	IsOrthogonal = isOrthogonal;
 	ViewArea.getTransform ( video::ETS_PROJECTION ) = projection;
 }
+// Ajouts : modification du coefficient de decalage du CcameraSceneNode
+void CCameraSceneNode::setInterocularDistance(float decalage) {
+	InterocularDistance = decalage;
+
+}   // setDirectionRange
+float CCameraSceneNode::getInterocularDistance() {
+	return InterocularDistance ;
+
+}   // getDirectionRange
+
+void CCameraSceneNode::setInterocularAngle(float angle) {
+	InterocularDistance = angle;
+
+}   // setDirectionRange
+float CCameraSceneNode::getInterocularAngle() {
+	return InterocularAngle ;
+
+}   // getDirectionRange
 
 
 //! Gets the current projection matrix of the camera
@@ -246,6 +264,8 @@ void CCameraSceneNode::render()
 {
 	core::vector3df pos = getAbsolutePosition();
 	core::vector3df tgtv = Target - pos;
+	float d = tgtv.getLength();
+	//std::cout << " cameratracking " << tgtv_norm /*.X << " " << tgtv.Y << " " << tgtv.Z */ << std::endl;
 	tgtv.normalize();
 
 	// if upvector and vector to the target are the same, we have a
@@ -259,9 +279,22 @@ void CCameraSceneNode::render()
 	{
 		up.X += 0.5f;
 	}
+	core::vector3df target, trans, poscam; //up
+	float k;
+	float di;
+	di= d*sqrt(2*(1-cos(InterocularAngle)));
+	core::vector3df v((float)(di*cos(InterocularAngle)),0.0,(float)(di*sin(InterocularAngle)));
 
-	ViewArea.getTransform(video::ETS_VIEW).buildCameraLookAtMatrixLH(pos, Target, up);
-	ViewArea.getTransform(video::ETS_VIEW) *= Affector;
+	core::vector3df target2 = pos+v;
+
+	target = tgtv.normalize();	        //m_camera->getTarget();
+	trans = up.crossProduct(target);
+	k = InterocularDistance;
+	poscam = pos + k* trans;
+
+	ViewArea.getTransform(video::ETS_VIEW).buildCameraLookAtMatrixLH(poscam, Target, up);
+	ViewArea.getTransform(video::ETS_VIEW); //*= Affector;
+
 	recalculateViewArea();
 
 	video::IVideoDriver* driver = SceneManager->getVideoDriver();

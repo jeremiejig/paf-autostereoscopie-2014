@@ -147,6 +147,14 @@ namespace scene
 
 	protected:
 
+		virtual void setInterocularDistance(float decalage);
+
+		virtual float getInterocularDistance();
+
+		virtual void setInterocularAngle(float angle);
+
+		virtual float getInterocularAngle();
+
 		void recalculateProjectionMatrix();
 		void recalculateViewArea();
 
@@ -157,6 +165,9 @@ namespace scene
 		f32 Aspect;	// Aspect ratio. 
 		f32 ZNear;	// value of the near view-plane. 
 		f32 ZFar;	// Z-value of the far view-plane.
+
+		float InterocularDistance;
+		float InterocularAngle;
 
 		SViewFrustum ViewArea;
 		core::matrix4 Affector;
