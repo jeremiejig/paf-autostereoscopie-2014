@@ -127,10 +127,10 @@ void ViewPlayer::OnSetConstants(video::IMaterialRendererServices* services, s32 
 {
     int m_index[8];
     //for(int i = 0 ; i < m_nbPlayers ; i++)
-    for(int i = 0 ; i < m_nbPlayers*2 ; i++)
+    for(int i = 0 ; i < 5 ; i++)
     {
         // The texture are named "tex0", "tex1"... in the shader
-        m_index[i]=i/2;
+        m_index[i]=2;
         std::ostringstream oss;
         oss << i;
         std::string iString = oss.str();

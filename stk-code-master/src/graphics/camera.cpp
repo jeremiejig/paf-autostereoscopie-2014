@@ -84,6 +84,48 @@ Camera::Camera(int camera_index, AbstractKart* kart) : m_kart(NULL)
     reset();
 }   // Camera
 
+//Attention j'ai modifié le constructeur pour ajouter un attribut paramétrable en plus!Ca fait un deuxième constructeur
+
+/*Camera::Camera(int camera_index, AbstractKart* kart, float direction_range) :
+		m_kart(NULL) {
+	m_mode = CM_NORMAL;
+	m_index = camera_index;
+	m_rain = NULL;
+	m_original_kart = kart;
+	m_camera = irr_driver->addCameraSceneNode();
+	m_direction_range = direction_range; // On attribue un coefficient de translation à la caméra
+#ifdef DEBUG
+	m_camera->setName(core::stringc("Camera for ") + kart->getKartProperties()->getName());
+#endif
+
+	setupCamera();
+	m_distance = kart->getKartProperties()->getCameraDistance();
+	setKart(kart);
+	m_ambient_light = World::getWorld()->getTrack()->getDefaultAmbientColor();
+
+	// TODO: Put these values into a config file
+	//       Global or per split screen zone?
+	//       Either global or per user (for instance, some users may not like
+	//       the extra camera rotation so they could set m_rotation_range to
+	//       zero to disable it for themselves).
+	m_position_speed = 8.0f;
+	m_target_speed = 10.0f;
+	m_rotation_range = 0.4f;
+	m_rotation_range = 0.0f;
+
+	// TODO: Make this per user too if the one above goes that way.
+	switch (UserConfigParams::m_camera_style) {
+	case 1:
+		m_camera_style = CS_CLASSIC;
+		break;
+	case 0:
+	default:
+		m_camera_style = CS_MODERN;
+		break;
+	}
+	reset();
+}   // Camera constructeur modifié
+*/
 // ----------------------------------------------------------------------------
 /** Removes the camera scene node from the scene.
  */
@@ -110,6 +152,24 @@ void Camera::setKart(AbstractKart *new_kart)
 
 }   // setKart
 
+/**
+ * Ici on change le maramètre de decalage de la camera
+ */
+
+/*void Camera::setDirectionRange(float direction_range) {
+	m_direction_range = direction_range;
+
+}   // setDirectionRange
+
+/*
+ * Ici on récupère le coefficient de translation de la camera
+ */
+
+/*float Camera::getDirectionRange() {
+	return m_direction_range;
+
+}  // getDirectionRange
+*/
 //-----------------------------------------------------------------------------
 /** This function clears all end camera data structure. This is necessary
  *  since all end cameras are shared between all camera instances (i.e. are
