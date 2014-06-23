@@ -533,6 +533,13 @@ int handleCmdLinePreliminary(int argc, char **argv)
             KartPropertiesManager::addKartSearchDir(argv[i+1]);
             i++;
         }
+        else if( !strcmp(argv[i], "--nbviews") && i+1<argc)
+        {
+            int nb;
+            StringUtils::fromString(argv[i+1], nb);
+            UserConfigParams::m_nbviews = nb;
+            i++;
+        }
         else if( !strcmp(argv[i], "--no-graphics") || !strncmp(argv[i], "--list-", 7) ||
                  !strcmp(argv[i], "-l" ))
         {
@@ -1074,13 +1081,6 @@ int handleCmdLine(int argc, char **argv)
         {
             UserConfigParams::m_race_now = true;
         }
-        else if( !strcmp(argv[i], "--nbviews") && i+1<argc)
-        {
-            int nb;
-            StringUtils::fromString(argv[i+1], nb);
-            UserConfigParams::m_nbviews = nb;
-            i++;
-        }
 #ifdef ENABLE_WIIUSE
         else if( !strcmp(argv[i], "--wii"))
         {
@@ -1109,6 +1109,7 @@ int handleCmdLine(int argc, char **argv)
         else if( !strcmp(argv[i], "--fullscreen") || !strcmp(argv[i], "-f")) {}
         else if( !strcmp(argv[i], "--windowed")   || !strcmp(argv[i], "-w")) {}
         else if( !strcmp(argv[i], "--version")    || !strcmp(argv[i], "-v")) {}
+        else if( !strcmp(argv[i], "--nbviews") && i+1<argc) { i++; }
 #ifdef __APPLE__
         // on OS X, sometimes the Finder will pass a -psn* something parameter
         // to the application
