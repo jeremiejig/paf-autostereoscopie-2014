@@ -20,6 +20,8 @@ CCameraSceneNode::CCameraSceneNode(ISceneNode* parent, ISceneManager* mgr, s32 i
 	Target(lookat), UpVector(0.0f, 1.0f, 0.0f), ZNear(1.0f), ZFar(3000.0f),
 	InputReceiverEnabled(true), TargetAndRotationAreBound(false)
 {
+	InterocularDistance = 0.0f;
+	InterocularAngle = 0.0f;
 	#ifdef _DEBUG
 	setDebugName("CCameraSceneNode");
 	#endif
