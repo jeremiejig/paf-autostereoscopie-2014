@@ -471,7 +471,7 @@ void IrrDriver::initDevice()
     m_post_processing = new PostProcessing(m_video_driver);
 
     // Initialize multi view rendering.
-    m_view_player = new ViewPlayer(m_device, 5);
+    m_view_player = new ViewPlayer(m_device, UserConfigParams::m_nbviews);
 
     // set cursor visible by default (what's the default is not too clearly documented,
     // so let's decide ourselves...)

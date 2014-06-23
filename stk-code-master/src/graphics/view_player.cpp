@@ -1,5 +1,6 @@
 #include "graphics/view_player.hpp"
 
+#include "config/user_config.hpp"
 #include "graphics/irr_driver.hpp"
 #include "io/file_manager.hpp"
 #include "utils/log.hpp"
@@ -12,11 +13,12 @@
 // ShaderPath is for the pixel shader
 ViewPlayer::ViewPlayer(IrrlichtDevice *device, int nbViews):m_device(device), m_nbViews(nbViews)
 {
-    core::dimension2du screenSize = device->getVideoDriver()->getScreenSize();
+    core::dimension2du screenSize = device->getVideoDriver()->getScreenSize() / sqrt(nbViews);
 
     for(int i = 0 ; i < nbViews ; i++)
     {
-        m_textures[i] = m_device->getVideoDriver()->addRenderTargetTexture(screenSize /= sqrt(nbViews));
+        m_textures[i] = m_device->getVideoDriver()->addRenderTargetTexture(screenSize);
+        Log::info("ViewPlayer","%d %d",screenSize.Width,screenSize.Height);
         beginCapture(i);
     }
 
@@ -90,6 +92,9 @@ void ViewPlayer::reset()
 void ViewPlayer::beginCapture(unsigned int views)
 {
     irr_driver->getVideoDriver()->setRenderTarget(m_textures[views], true, true, 0);
+    irr_driver->getVideoDriver()->setViewPort(core::recti(0, 0,
+                                                UserConfigParams::m_width/sqrt(m_nbViews),
+                                                UserConfigParams::m_height/sqrt(m_nbViews)));
 }
 
 // ----------------------------------------------------------------------------
