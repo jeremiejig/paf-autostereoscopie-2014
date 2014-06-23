@@ -128,6 +128,7 @@ void ViewPlayer::render3D()
 void ViewPlayer::OnSetConstants(video::IMaterialRendererServices* services, s32 userData)
 {
     int index[8];
+    services->setPixelShaderConstant((std::string("nbviews")).c_str() ,(&m_nbViews), 1);
     //for(int i = 0 ; i < m_nbViews ; i++)
     for(int i = 0 ; i < m_nbViews ; i++)
     {

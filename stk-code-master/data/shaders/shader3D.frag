@@ -1,3 +1,5 @@
+uniform int nbviews;
+
 uniform sampler2D tex0;
 uniform sampler2D tex1;
 uniform sampler2D tex2;
@@ -23,7 +25,7 @@ void getTextureSample(in int texID, out vec4 color) {
 
 void main()
 {
-  int nbviews = 5;
+  //int nbviews = 5;
   int x = int(gl_FragCoord.x + 0.5);
   int y = int(gl_FragCoord.y + 0.5) ;
   int modulox = x/nbviews;
