@@ -1771,7 +1771,7 @@ void IrrDriver::update(float dt)
 
                 //Tracer Monde
                 m_view_player->beginCapture(i);
-            	my_Scene_Node->setInterocularDistance(-m_view_player->getInterocularAngle()/2 + (float)( i % 2) * m_view_player->getInterocularAngle());
+            	my_Scene_Node->setInterocularDistance(m_view_player->getInterocularAngle()/2 - (float)( i % 2) * m_view_player->getInterocularAngle());
                 //Log::info( "stereonumber" , "%d", i);
                 m_scene_manager->drawAll();
 
@@ -1844,12 +1844,12 @@ void IrrDriver::update(float dt)
                 PROFILER_POP_CPU_MARKER();
             }  // for i<getNumKarts
 
-            m_view_player->endCapture();
-
-            m_view_player->render3D();
         }
         }
     }
+    m_view_player->endCapture();
+
+    m_view_player->render3D();
 
     // Either render the gui, or the global elements of the race gui.
     GUIEngine::render(dt);
