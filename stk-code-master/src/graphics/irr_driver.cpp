@@ -1700,11 +1700,11 @@ void IrrDriver::update(float dt)
             my_Scene_Node = camera->getCameraSceneNode();
             PROFILER_POP_CPU_MARKER();
 
-            for(int i=0; i< 5 /*my_Scene_Node->getStereo()*/; i++)
+            for(int i=0; i< 8 /*my_Scene_Node->getStereo()*/; i++)
             {
             	//Tracer Monde
                 m_view_player->beginCapture(i);
-            	my_Scene_Node->setInterocularDistance(0.0 + (float)i * 0.5);
+            	my_Scene_Node->setInterocularDistance(0.2 - (float)i * 0.05);
                 //Log::info( "stereonumber" , "%d", i);
                 m_scene_manager->drawAll();
 

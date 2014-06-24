@@ -281,7 +281,7 @@ void CCameraSceneNode::render()
 	{
 		up.X += 0.5f;
 	}
-	core::vector3df target, trans, poscam; //up
+	core::vector3df target, trans, poscam, Targetcam; //up
 	float k;
 	float di;
 	di= d*sqrt(2*(1-cos(InterocularAngle)));
@@ -293,8 +293,9 @@ void CCameraSceneNode::render()
 	trans = up.crossProduct(target);
 	k = InterocularDistance;
 	poscam = pos + k* trans;
+	Targetcam = Target + 3.0 * target;
 
-	ViewArea.getTransform(video::ETS_VIEW).buildCameraLookAtMatrixLH(poscam, Target, up);
+	ViewArea.getTransform(video::ETS_VIEW).buildCameraLookAtMatrixLH(poscam, Targetcam, up);
 	ViewArea.getTransform(video::ETS_VIEW); //*= Affector;
 
 	recalculateViewArea();
