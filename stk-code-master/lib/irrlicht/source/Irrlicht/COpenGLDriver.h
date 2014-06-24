@@ -348,6 +348,11 @@ namespace video
 				const io::path& name, const ECOLOR_FORMAT format = ECF_UNKNOWN,
 				const bool useStencil = false);
 
+        //! If zBuffer is NULL, it is ignored. Else, a pointer on a depthmap is stored
+        virtual ITexture* addRenderTargetTextureWithDepthBuffer(ITexture** zBuffer, const core::dimension2d<u32>& size,
+				const io::path& name, const ECOLOR_FORMAT format = ECF_UNKNOWN,
+				const bool useStencil = false);
+
 		//! set or reset render target
 		virtual bool setRenderTarget(video::E_RENDER_TARGET target, bool clearTarget,
 					bool clearZBuffer, SColor color);

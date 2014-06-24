@@ -450,6 +450,11 @@ namespace video
 				const io::path& name = "rt", const ECOLOR_FORMAT format = ECF_UNKNOWN,
 				const bool useStencil = false) =0;
 
+		//! Same as before, and puts the zBuffer into the pointer
+		virtual ITexture* addRenderTargetTextureWithDepthBuffer(ITexture** zBuffer, const core::dimension2d<u32>& size,
+				const io::path& name = "rt", const ECOLOR_FORMAT format = ECF_UNKNOWN,
+				const bool useStencil = false) =0;
+
 		//! Removes a texture from the texture cache and deletes it.
 		/** This method can free a lot of memory!
 		Please note that after calling this, the pointer to the

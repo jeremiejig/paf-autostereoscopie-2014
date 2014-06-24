@@ -2321,6 +2321,14 @@ ITexture* CNullDriver::addRenderTargetTexture(const core::dimension2d<u32>& size
 	return 0;
 }
 
+//! Same as before with a depth buffer
+ITexture* CNullDriver::addRenderTargetTextureWithDepthBuffer(ITexture** zBuffer,
+		const core::dimension2d<u32>& size, const io::path&name,
+		const ECOLOR_FORMAT format, const bool useStencil)
+{
+	return 0;
+}
+
 
 //! Clears the ZBuffer.
 void CNullDriver::clearZBuffer()

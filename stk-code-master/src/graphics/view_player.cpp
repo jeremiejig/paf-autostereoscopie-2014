@@ -11,17 +11,18 @@
 #include <string>
 
 // ShaderPath is for the pixel shader
-ViewPlayer::ViewPlayer(IrrlichtDevice *device, int nbViews, bool is3DOn, float interocularAngle) :
+ViewPlayer::ViewPlayer(IrrlichtDevice *device, int nbViews, bool is3DOn, float interocularAngle, bool SVAlg) :
                                                             m_device(device),
                                                             m_nbViews(nbViews),
                                                             m_3DOn(is3DOn),
-                                                            m_interocularAngle(interocularAngle)
+                                                            m_interocularAngle(interocularAngle),
+                                                            m_SVAlg(SVAlg)
 {
     core::dimension2du screenSize = device->getVideoDriver()->getScreenSize() / sqrt(nbViews);
 
     for(int i = 0 ; i < nbViews ; i++)
     {
-        m_textures[i] = m_device->getVideoDriver()->addRenderTargetTexture(screenSize);
+        m_textures[i] = m_device->getVideoDriver()->addRenderTargetTextureWithDepthBuffer(&m_zBuffers[i], screenSize);
         beginCapture(i);
     }
 
@@ -33,11 +34,19 @@ ViewPlayer::ViewPlayer(IrrlichtDevice *device, int nbViews, bool is3DOn, float i
 
     if (gpu)
     {
+        if (m_SVAlg)
+        {
+            interlacingShader = gpu->addHighLevelShaderMaterialFromFiles(   (file_manager->getShaderDir() + "shader3D.vert").c_str(),  "main", irr::video::EVST_VS_1_1,
+                                                                            (file_manager->getShaderDir() + "SVAlg.frag").c_str(),     "main", irr::video::EPST_PS_1_1,
+                                                                            this, irr::video::EMT_SOLID);
+        }
 
-        // Auto assignment of the shader
-        interlacingShader = gpu->addHighLevelShaderMaterialFromFiles(   (file_manager->getShaderDir() + "shader3D.vert").c_str(), "main", irr::video::EVST_VS_1_1,
-                                                                        (file_manager->getShaderDir() + "shader3D.frag").c_str(), "main", irr::video::EPST_PS_1_1,
-                                                                        this, irr::video::EMT_SOLID);
+        else
+        {
+            interlacingShader = gpu->addHighLevelShaderMaterialFromFiles(   (file_manager->getShaderDir() + "shader3D.vert").c_str(), "main", irr::video::EVST_VS_1_1,
+                                                                            (file_manager->getShaderDir() + "shader3D.frag").c_str(), "main", irr::video::EPST_PS_1_1,
+                                                                            this, irr::video::EMT_SOLID);
+        }
     }
 
 
@@ -99,14 +108,14 @@ void ViewPlayer::reset()
 void ViewPlayer::beginCapture(unsigned int views)
 {
     irr_driver->getVideoDriver()->setRenderTarget(m_textures[views], true, true, 0);
-    irr_driver->getVideoDriver()->setViewPort(core::recti(0, 0,
+    /*irr_driver->getVideoDriver()->setViewPort(core::recti(0, 0,
                                                 UserConfigParams::m_width/sqrt(m_nbViews),
-                                                UserConfigParams::m_height/sqrt(m_nbViews)));
+                                                UserConfigParams::m_height/sqrt(m_nbViews)));*/
 }
 
 // ----------------------------------------------------------------------------
-/** Restore the framebuffer render target.
-  */
+// Restore the framebuffer render target.
+
 void ViewPlayer::endCapture()
 {
     irr_driver->getVideoDriver()->setRenderTarget(video::ERT_FRAME_BUFFER,
@@ -141,7 +150,7 @@ void ViewPlayer::OnSetConstants(video::IMaterialRendererServices* services, s32 
     for(int i = 0 ; i < m_nbViews ; i++)
     {
         // The texture are named "tex0", "tex1"... in the shader
-        index[i]=i/2;
+        index[i]=i;
         std::ostringstream oss;
         oss << i;
         std::string iString = oss.str();

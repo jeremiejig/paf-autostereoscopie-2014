@@ -16,14 +16,18 @@ using namespace irr;
 class ViewPlayer : public video::IShaderConstantSetCallBack
 {
     public:
-        ViewPlayer(IrrlichtDevice *device, int nbViews = 8, bool is3DOn = true, float interocularAngle = 0.1);
+        ViewPlayer(IrrlichtDevice *device, int nbViews = 8, bool is3DOn = true, float interocularAngle = 0.05, bool SVAlg = false);
 
         virtual ~ViewPlayer();
 
         video::ITexture *getTexture(int playerIndex) {return m_textures[playerIndex];}
         video::SMaterial getProcessedTexture() {return m_material;}
         float getInterocularAngle() {return m_interocularAngle;}
-        bool is3DOn() {return m_3DOn;}
+        bool is3DOn()   {return m_3DOn;}
+        bool getSVAlg() {return m_SVAlg;}
+
+        void set3D      (bool is3DOn)   {m_3DOn = is3DOn;}
+        void setSVAlg   (bool SVAlg)    {m_SVAlg = SVAlg;}
 
         virtual void OnSetConstants(video::IMaterialRendererServices* services, s32 userData);
 
@@ -39,8 +43,10 @@ class ViewPlayer : public video::IShaderConstantSetCallBack
         int m_nbViews;
         bool m_3DOn;
         float m_interocularAngle;
+        bool m_SVAlg; // use Sormain-Vaulet algorithm
 
         video::ITexture *m_textures[8];
+        video::ITexture *m_zBuffers[8];
         video::SMaterial m_material;
 
         struct Quad { video::S3DVertex v0, v1, v2, v3; };
