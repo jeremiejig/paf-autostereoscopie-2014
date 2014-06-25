@@ -3990,6 +3990,67 @@ IVideoDriver* COpenGLDriver::getVideoDriver()
 	return this;
 }
 
+//! Exactly the same as addRenderTargetTexture but with the depth buffer
+//! New function because of fucking heritage
+ITexture* COpenGLDriver::addRenderTargetTextureWithDepthBuffer(ITexture** zBuffer,
+                    const core::dimension2d<u32>& size,
+					const io::path& name,
+					const ECOLOR_FORMAT format,
+					const bool useStencil)
+{
+    //disable mip-mapping
+	bool generateMipLevels = getTextureCreationFlag(ETCF_CREATE_MIP_MAPS);
+	setTextureCreationFlag(ETCF_CREATE_MIP_MAPS, false);
+
+	video::ITexture* rtt = 0;
+#if defined(GL_EXT_framebuffer_object)
+	// if driver supports FrameBufferObjects, use them
+	if (queryFeature(EVDF_FRAMEBUFFER_OBJECT))
+	{
+		rtt = new COpenGLFBOTexture(size, name, this, format);
+		if (rtt)
+		{
+			bool success = false;
+			addTexture(rtt);
+			ITexture* tex = createDepthTexture(rtt, useStencil);
+			if (tex)
+			{
+				success = static_cast<video::COpenGLFBODepthTexture*>(tex)->attach(rtt);
+				if ( !success )
+				{
+					removeDepthTexture(tex);
+				}
+
+				zBuffer = &tex;
+			}
+			rtt->drop();
+			if (!success)
+			{
+				removeTexture(rtt);
+				rtt=0;
+			}
+		}
+	}
+	else
+#endif
+	{
+		// the simple texture is only possible for size <= screensize
+		// we try to find an optimal size with the original constraints
+		core::dimension2du destSize(core::min_(size.Width,ScreenSize.Width), core::min_(size.Height,ScreenSize.Height));
+		destSize = destSize.getOptimalSize((size==size.getOptimalSize()), false, false);
+		rtt = addTexture(destSize, name, ECF_A8R8G8B8);
+		if (rtt)
+		{
+			static_cast<video::COpenGLTexture*>(rtt)->setIsRenderTarget(true);
+		}
+	}
+
+	//restore mip-mapping
+	setTextureCreationFlag(ETCF_CREATE_MIP_MAPS, generateMipLevels);
+
+	return rtt;
+}
+
 
 ITexture* COpenGLDriver::addRenderTargetTexture(const core::dimension2d<u32>& size,
 					const io::path& name,
