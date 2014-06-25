@@ -446,6 +446,9 @@ namespace video
 		\return Pointer to the created texture or 0 if the texture
 		could not be created. This pointer should not be dropped. See
 		IReferenceCounted::drop() for more information. */
+
+		virtual ITexture* createDepthTexture(ITexture* texture, const bool useStencil = false, const bool shared = true, const bool isTexture = false) = 0;
+
 		virtual ITexture* addRenderTargetTexture(const core::dimension2d<u32>& size,
 				const io::path& name = "rt", const ECOLOR_FORMAT format = ECF_UNKNOWN,
 				const bool useStencil = false) =0;
