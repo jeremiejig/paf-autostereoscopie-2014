@@ -11,13 +11,23 @@
 #include <string>
 
 // ShaderPath is for the pixel shader
-ViewPlayer::ViewPlayer(IrrlichtDevice *device, int nbViews, bool is3DOn, float interocularAngle, bool SVAlg) :
+ViewPlayer::ViewPlayer(IrrlichtDevice *device, int nbViews, bool leftInterlacing) :
                                                             m_device(device),
                                                             m_nbViews(nbViews),
-                                                            m_3DOn(is3DOn),
-                                                            m_interocularAngle(interocularAngle),
-                                                            m_SVAlg(SVAlg)
+                                                            m_3DOn(true),
+                                                            m_interocularDistance(0.05),
+                                                            m_SVAlg(false),
+                                                            m_firstView(0),
+                                                            m_repeatTextures(1)
 {
+    if (leftInterlacing)
+        leftInterlacing = 1;
+    else
+        leftInterlacing = -1;
+
+    if (nbViews == 5)
+        m_leftInterlacing = true;
+
     core::dimension2du screenSize = device->getVideoDriver()->getScreenSize() / sqrt(nbViews);
 
     for(int i = 0 ; i < nbViews ; i++)
@@ -65,7 +75,11 @@ ViewPlayer::ViewPlayer(IrrlichtDevice *device, int nbViews, bool is3DOn, float i
 
 ViewPlayer::~ViewPlayer()
 {
-    //dtor
+    for (int i = 0 ; i < m_nbViews ; i++)
+    {
+        m_textures[i]->drop();
+        m_zBuffers[i]->drop();
+    }
 }
 
 void ViewPlayer::reset()
@@ -139,18 +153,21 @@ void ViewPlayer::render3D()
         video_driver->drawIndexedTriangleList(&(m_vertices.v0),
                                               4, &indices[0], 2);
 
-}   // render
+}
 
 //Est appelé automatiquement dans render3D
 void ViewPlayer::OnSetConstants(video::IMaterialRendererServices* services, s32 userData)
 {
     int index[8];
     services->setPixelShaderConstant((std::string("nbviews")).c_str() ,(&m_nbViews), 1);
-    //for(int i = 0 ; i < m_nbViews ; i++)
+    services->setPixelShaderConstant((std::string("leftInterlacing")).c_str() ,(&m_leftInterlacing), 1);
+
     for(int i = 0 ; i < m_nbViews ; i++)
     {
         // The texture are named "tex0", "tex1"... in the shader
-        index[i]=i;
+        index[i]=((i+m_firstView) % m_nbViews) / m_repeatTextures;
+
+
         std::ostringstream oss;
         oss << i;
         std::string iString = oss.str();

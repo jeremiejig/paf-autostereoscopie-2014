@@ -16,18 +16,28 @@ using namespace irr;
 class ViewPlayer : public video::IShaderConstantSetCallBack
 {
     public:
-        ViewPlayer(IrrlichtDevice *device, int nbViews = 8, bool is3DOn = true, float interocularAngle = 0.05, bool SVAlg = false);
+        ViewPlayer(IrrlichtDevice *device, int nbViews = 8, bool leftInterlacing = false);
 
         virtual ~ViewPlayer();
 
+
+        //! Getters
+
         video::ITexture *getTexture(int playerIndex) {return m_textures[playerIndex];}
         video::SMaterial getProcessedTexture() {return m_material;}
-        float getInterocularAngle() {return m_interocularAngle;}
+        float getInterocularDistance() {return m_interocularDistance;}
         bool is3DOn()   {return m_3DOn;}
         bool getSVAlg() {return m_SVAlg;}
 
+
+        //! Setters
+
         void set3D      (bool is3DOn)   {m_3DOn = is3DOn;}
         void setSVAlg   (bool SVAlg)    {m_SVAlg = SVAlg;}
+        void setFirstView       (int firstView)     {m_firstView = firstView;}
+        void setViewsPerTexture (int repeatTextures){m_repeatTextures = repeatTextures;}
+
+
 
         virtual void OnSetConstants(video::IMaterialRendererServices* services, s32 userData);
 
@@ -42,8 +52,19 @@ class ViewPlayer : public video::IShaderConstantSetCallBack
         IrrlichtDevice *m_device;
         int m_nbViews;
         bool m_3DOn;
-        float m_interocularAngle;
-        bool m_SVAlg; // use Sormain-Vaulet algorithm
+        float m_interocularDistance;
+
+        // Use Sormain-Vaulet algorithm
+        bool m_SVAlg;
+
+        // Index of the first view (left)
+        int m_firstView;
+
+        // Number of views per texture
+        int m_repeatTextures;
+
+        // 1 if it's towards the left, else -1
+        int m_leftInterlacing;
 
         video::ITexture *m_textures[8];
         video::ITexture *m_zBuffers[8];

@@ -1778,7 +1778,7 @@ void IrrDriver::update(float dt)
                         PROFILER_POP_CPU_MARKER();
                         m_view_player->beginCapture(i);
 
-                        my_Scene_Node->setInterocularDistance(-m_view_player->getInterocularAngle()/2 + (float)(i%2) * m_view_player->getInterocularAngle());
+                        my_Scene_Node->setInterocularDistance(-m_view_player->getInterocularDistance()/2 + (float)(i%2) * m_view_player->getInterocularDistance());
                         //Log::info( "stereonumber" , "%d", i);
                         m_scene_manager->drawAll();
 

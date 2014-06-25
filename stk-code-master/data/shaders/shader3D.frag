@@ -1,5 +1,9 @@
 uniform int nbviews;
 
+// Tells the orientation of the screen parallax barriers
+// 1 if it's towards the left, else -1
+uniform int leftInterlacing; 
+
 uniform sampler2D tex0;
 uniform sampler2D tex1;
 uniform sampler2D tex2;
@@ -25,7 +29,6 @@ void getTextureSample(in int texID, out vec4 color) {
 
 void main()
 {
-  //int nbviews = 5;
   int x = int(gl_FragCoord.x + 0.5);
   int y = int(gl_FragCoord.y + 0.5) ;
   int modulox = x/nbviews;
@@ -34,7 +37,7 @@ void main()
   moduloy = y - nbviews * moduloy;
 
   int viewLine = nbviews - 1 - moduloy ;
-  int viewPix = viewLine + 3 * modulox ;
+  int viewPix = viewLine + leftInterlacing * 3 * modulox ;
   int viewR = viewPix - nbviews*(viewPix/nbviews) ;
   int viewG = viewPix + 1 - nbviews*((viewPix +1)/nbviews);
   int viewB = viewPix + 2 - nbviews*((viewPix +2)/nbviews);
@@ -47,6 +50,5 @@ void main()
   gl_FragColor.g = colG.g ;
   getTextureSample(viewB, colB) ;
   gl_FragColor.b = colB.b ;
-
 }
 
