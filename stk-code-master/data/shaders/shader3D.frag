@@ -2,7 +2,7 @@ uniform int nbviews;
 
 // Tells the orientation of the screen parallax barriers
 // 1 if it's towards the left, else -1
-uniform int leftInterlacing; 
+uniform bool leftInterlacing; 
 
 uniform sampler2D tex0;
 uniform sampler2D tex1;
@@ -36,8 +36,13 @@ void main()
   modulox = x - nbviews * modulox;
   moduloy = y - nbviews * moduloy;
 
-  int viewLine = nbviews - 1 - moduloy ;
-  int viewPix = viewLine + leftInterlacing * 3 * modulox ;
+  int viewLine;
+
+  if (leftInterlacing)
+    viewLine = nbviews - 1 - moduloy ;
+  else
+    viewLine = moduloy;
+  int viewPix = viewLine + 3 * modulox ;
   int viewR = viewPix - nbviews*(viewPix/nbviews) ;
   int viewG = viewPix + 1 - nbviews*((viewPix +1)/nbviews);
   int viewB = viewPix + 2 - nbviews*((viewPix +2)/nbviews);

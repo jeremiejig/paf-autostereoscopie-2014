@@ -18,13 +18,9 @@ ViewPlayer::ViewPlayer(IrrlichtDevice *device, int nbViews, bool leftInterlacing
                                                             m_interocularDistance(0.05),
                                                             m_SVAlg(false),
                                                             m_firstView(0),
-                                                            m_viewsPerTexture(viewsPerTexture)
+                                                            m_viewsPerTexture(viewsPerTexture),
+                                                            m_leftInterlacing(leftInterlacing)
 {
-    if (leftInterlacing)
-        leftInterlacing = 1;
-    else
-        leftInterlacing = -1;
-
     if (nbViews == 5)
         m_leftInterlacing = true;
 

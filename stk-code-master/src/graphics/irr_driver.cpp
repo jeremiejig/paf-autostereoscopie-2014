@@ -475,8 +475,8 @@ void IrrDriver::initDevice()
 
     if (UserConfigParams::m_nbviews == 8)
     {
-        m_view_player->setViewsPerTexture(2);
-        UserConfigParams::m_nbviews = 4;
+        /*m_view_player->setViewsPerTexture(2);
+        UserConfigParams::m_nbviews = 4;*/
     }
 
     // set cursor visible by default (what's the default is not too clearly documented,
@@ -1713,9 +1713,9 @@ void IrrDriver::update(float dt)
                 m_view_player->beginCapture(i);
 
                 //Les vues sont équiréparties autour du centre
-            	my_Scene_Node->setInterocularDistance(- (float) UserConfigParams::m_nbviews
+            	my_Scene_Node->setInterocularDistance((float) UserConfigParams::m_nbviews
                                                    / 2.0 * m_view_player->getInterocularDistance()
-                                                   + i * m_view_player->getInterocularDistance());
+                                                   - i * m_view_player->getInterocularDistance());
                 //Log::info( "stereonumber" , "%d", i);
                 m_scene_manager->drawAll();
 
@@ -1758,7 +1758,7 @@ void IrrDriver::update(float dt)
 
         else
         {
-            int max_loop_multiplier = m_view_player->is3DOn() ? 2 : 1 ;
+            int max_loop_multiplier = m_view_player->is3DOn() ? 4 : 1 ;
             //Mode multiplayer
             for(unsigned int i=0; i<Camera::getNumCameras() * max_loop_multiplier; i++)
             {
@@ -1772,7 +1772,7 @@ void IrrDriver::update(float dt)
 
                     else
                     {
-                        Camera *camera = Camera::getCamera(i/2);
+                        Camera *camera = Camera::getCamera(i/max_loop_multiplier);
                         scene::ICameraSceneNode *my_Scene_Node;
 
     #ifdef ENABLE_PROFILER
@@ -1789,7 +1789,7 @@ void IrrDriver::update(float dt)
                         PROFILER_POP_CPU_MARKER();
                         m_view_player->beginCapture(i);
 
-                        my_Scene_Node->setInterocularDistance(-m_view_player->getInterocularDistance()/2 + (float)(i%2) * m_view_player->getInterocularDistance());
+                        my_Scene_Node->setInterocularDistance(max_loop_multiplier * m_view_player->getInterocularDistance()/2 - (float)(i%max_loop_multiplier) * m_view_player->getInterocularDistance());
                         //Log::info( "stereonumber" , "%d", i);
                         m_scene_manager->drawAll();
 
