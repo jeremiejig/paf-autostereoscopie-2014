@@ -155,7 +155,7 @@ void ViewPlayer::drawPlayerViewToTexture(unsigned int views)
     u32 texHeight = textures_player_view.getOriginalSize().Height;
 
     core::rect<s32> rectTexture(0,0,targetWidth,targetHeight);
-    core::rect<s32> rectTexturePlayerView(0,0,texWidth,texHeight);
+    core::rect<s32> rectTexturePlayerView(0,texHeight,texWidth,0);
 
     // video_driver->setMaterial(viewPlayer);
     //video_driver->setTransform(video::ETS_PROJECTION, core::IdentityMatrix);
