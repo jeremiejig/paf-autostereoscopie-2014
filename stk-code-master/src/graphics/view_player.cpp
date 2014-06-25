@@ -61,8 +61,8 @@ ViewPlayer::ViewPlayer(IrrlichtDevice *device, int nbViews, bool leftInterlacing
 
     for (int i = 0 ; i < m_nbViews ; i++)
     {
-        m_material.setTexture(i,m_zBuffers[i]);
-    	//m_material.setTexture(i,m_textures[i]);
+        //m_material.setTexture(i,m_zBuffers[i]);
+    	m_material.setTexture(i,m_textures[i]);
     }
 
     m_material.Wireframe = false;
