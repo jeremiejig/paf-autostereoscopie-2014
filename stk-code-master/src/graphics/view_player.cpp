@@ -72,12 +72,8 @@ ViewPlayer::ViewPlayer(IrrlichtDevice *device, int nbViews, bool leftInterlacing
 
 ViewPlayer::~ViewPlayer()
 {
-    for (int i = 0 ; i < m_nbViews ; i++)
-    {
-        m_textures[i]->drop();
-        m_zBuffers[i]->drop();
-    }
-}
+    // TODO: do we have to delete/drop anything?
+}   // ~ViewPlayer
 
 void ViewPlayer::reset()
 {
