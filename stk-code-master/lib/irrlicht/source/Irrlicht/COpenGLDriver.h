@@ -398,7 +398,7 @@ namespace video
 		virtual core::dimension2du getMaxTextureSize() const;
 
 		ITexture* createDepthTexture(ITexture* texture, const bool useStencil = false,
-						const bool shared = true);
+						const bool shared = true, const bool isTexture = false);
 		void removeDepthTexture(ITexture* texture);
 
 		//! Removes a texture from the texture cache and deletes it, freeing lot of memory.

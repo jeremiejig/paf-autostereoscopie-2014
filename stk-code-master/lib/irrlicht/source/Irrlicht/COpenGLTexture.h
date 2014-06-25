@@ -177,7 +177,7 @@ class COpenGLFBODepthTexture : public COpenGLTexture
 {
 public:
 	//! FrameBufferObject depth constructor
-	COpenGLFBODepthTexture(const core::dimension2d<u32>& size, const io::path& name, COpenGLDriver* driver=0, bool useStencil=false);
+	COpenGLFBODepthTexture(const core::dimension2d<u32>& size, const io::path& name, COpenGLDriver* driver=0, bool useStencil=false, bool isTexture=false);
 
 	//! destructor
 	virtual ~COpenGLFBODepthTexture();
@@ -196,6 +196,7 @@ protected:
 	GLuint DepthRenderBuffer;
 	GLuint StencilRenderBuffer;
 	bool UseStencil;
+	bool isTexture; //Do not generate a renderbuffer
 };
 
 

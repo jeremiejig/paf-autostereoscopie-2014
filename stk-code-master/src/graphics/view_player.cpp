@@ -26,10 +26,16 @@ ViewPlayer::ViewPlayer(IrrlichtDevice *device, int nbViews, bool leftInterlacing
 
     core::dimension2du screenSize = device->getVideoDriver()->getScreenSize() / sqrt(nbViews);
 
-    for(int i = 0 ; i < nbViews ; i++)
+    for(int i = 0 ; i < m_nbViews ; i++)
     {
         m_textures[i] = m_device->getVideoDriver()->addRenderTargetTextureWithDepthBuffer(&m_zBuffers[i], screenSize);
         beginCapture(i);
+    }
+
+    for (int i = 0 ; i < m_nbViews ; i++)
+    {
+        if (m_zBuffers[0] == NULL)
+            Log::info("viewplayer","prout");
     }
 
     endCapture();
@@ -61,7 +67,8 @@ ViewPlayer::ViewPlayer(IrrlichtDevice *device, int nbViews, bool leftInterlacing
 
     for (int i = 0 ; i < m_nbViews ; i++)
     {
-        m_material.setTexture(i,m_textures[i]);
+        //m_material.setTexture(i,m_zBuffers[i]);
+    	m_material.setTexture(i,m_textures[i]);
     }
 
     m_material.Wireframe = false;
@@ -118,6 +125,8 @@ void ViewPlayer::reset()
 void ViewPlayer::beginCapture(unsigned int views)
 {
     irr_driver->getVideoDriver()->setRenderTarget(m_textures[views], true, true, 0);
+    //m_zBuffers[views] = m_device->getVideoDriver()->createDepthTexture(m_textures[views]);
+
     /*irr_driver->getVideoDriver()->setViewPort(core::recti(0, 0,
                                                 UserConfigParams::m_width/sqrt(m_nbViews),
                                                 UserConfigParams::m_height/sqrt(m_nbViews)));*/

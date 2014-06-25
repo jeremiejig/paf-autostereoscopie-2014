@@ -315,6 +315,9 @@ namespace video
 		//! memory.
 		virtual void removeAllTextures();
 
+		//! Creats depths texture from color texture
+		virtual ITexture* createDepthTexture(ITexture* texture, const bool useStencil = false, const bool shared = true, const bool isTexture = false);
+
 		//! Creates a render target texture.
 		virtual ITexture* addRenderTargetTexture(const core::dimension2d<u32>& size,
 			const io::path& name, const ECOLOR_FORMAT format = ECF_UNKNOWN,

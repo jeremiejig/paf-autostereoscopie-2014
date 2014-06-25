@@ -2312,6 +2312,10 @@ s32 CNullDriver::addShaderMaterialFromFiles(const io::path& vertexShaderProgramF
 	return result;
 }
 
+ITexture* CNullDriver::createDepthTexture(ITexture* texture, const bool useStencil, const bool shared, const bool isTexture)
+{
+	return 0;
+}
 
 //! Creates a render target texture.
 ITexture* CNullDriver::addRenderTargetTexture(const core::dimension2d<u32>& size,

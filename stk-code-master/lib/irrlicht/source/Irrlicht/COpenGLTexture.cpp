@@ -785,9 +785,10 @@ COpenGLFBODepthTexture::COpenGLFBODepthTexture(
 		const core::dimension2d<u32>& size,
 		const io::path& name,
 		COpenGLDriver* driver,
-		bool useStencil)
+		bool useStencil,
+		bool isTexture)
 	: COpenGLTexture(name, driver), DepthRenderBuffer(0),
-	StencilRenderBuffer(0), UseStencil(useStencil)
+	StencilRenderBuffer(0), UseStencil(useStencil), isTexture(isTexture)
 {
 #ifdef _DEBUG
 	setDebugName("COpenGLTextureFBO_Depth");
@@ -808,7 +809,7 @@ COpenGLFBODepthTexture::COpenGLFBODepthTexture(
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 #ifdef GL_EXT_packed_depth_stencil
-		if (Driver->queryOpenGLFeature(COpenGLExtensionHandler::IRR_EXT_packed_depth_stencil))
+		if (false && Driver->queryOpenGLFeature(COpenGLExtensionHandler::IRR_EXT_packed_depth_stencil))
 		{
 			// generate packed depth stencil texture
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_STENCIL_EXT, ImageSize.Width,
@@ -833,6 +834,18 @@ COpenGLFBODepthTexture::COpenGLFBODepthTexture(
 		}
 	}
 #ifdef GL_EXT_framebuffer_object
+	else if(isTexture)
+	{
+		// generate depth buffer
+		glGenTextures(1, &DepthRenderBuffer);
+		glBindTexture(GL_TEXTURE_2D, DepthRenderBuffer);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glTexImage2D(GL_TEXTURE_2D, 0, Driver->getZBufferBits(), ImageSize.Width,
+						ImageSize.Height, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, NULL);
+		TextureName = DepthRenderBuffer;
+	}
 	else
 	{
 		// generate depth buffer
@@ -841,6 +854,7 @@ COpenGLFBODepthTexture::COpenGLFBODepthTexture(
 		Driver->extGlRenderbufferStorage(GL_RENDERBUFFER_EXT,
 				Driver->getZBufferBits(), ImageSize.Width,
 				ImageSize.Height);
+
 	}
 #endif
 }

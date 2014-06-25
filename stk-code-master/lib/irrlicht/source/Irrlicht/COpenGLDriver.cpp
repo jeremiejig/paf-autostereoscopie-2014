@@ -868,6 +868,7 @@ bool COpenGLDriver::endScene()
 void COpenGLDriver::clearBuffers(bool backBuffer, bool zBuffer, bool stencilBuffer, SColor color)
 {
 	GLbitfield mask = 0;
+	mask = 0;
 	if (backBuffer)
 	{
 		const f32 inv = 1.0f / 255.0f;
@@ -4012,7 +4013,7 @@ ITexture* COpenGLDriver::addRenderTargetTextureWithDepthBuffer(ITexture** zBuffe
 		{
 			bool success = false;
 			addTexture(rtt);
-			ITexture* tex = createDepthTexture(rtt, useStencil);
+			ITexture* tex = createDepthTexture(rtt, useStencil, false, true);
 			if (tex)
 			{
 				success = static_cast<video::COpenGLFBODepthTexture*>(tex)->attach(rtt);
@@ -4021,7 +4022,8 @@ ITexture* COpenGLDriver::addRenderTargetTextureWithDepthBuffer(ITexture** zBuffe
 					removeDepthTexture(tex);
 				}
 
-				zBuffer = &tex;
+				*zBuffer = tex;
+				//addTexture(tex);
 			}
 			rtt->drop();
 			if (!success)
@@ -4644,7 +4646,7 @@ IImage* COpenGLDriver::createScreenShot(video::ECOLOR_FORMAT format, video::E_RE
 
 
 //! get depth texture for the given render target texture
-ITexture* COpenGLDriver::createDepthTexture(ITexture* texture, const bool useStencil, const bool shared)
+ITexture* COpenGLDriver::createDepthTexture(ITexture* texture, const bool useStencil, const bool shared, const bool isTexture)
 {
 	if ((texture->getDriverType() != EDT_OPENGL) || (!texture->isRenderTarget()))
 		return 0;
@@ -4664,10 +4666,10 @@ ITexture* COpenGLDriver::createDepthTexture(ITexture* texture, const bool useSte
 				return DepthTextures[i];
 			}
 		}
-		DepthTextures.push_back(new COpenGLFBODepthTexture(texture->getSize(), "depth1", this, useStencil));
+		DepthTextures.push_back(new COpenGLFBODepthTexture(texture->getSize(), "depth1", this, useStencil, isTexture));
 		return DepthTextures.getLast();
 	}
-	return (new COpenGLFBODepthTexture(texture->getSize(), "depth1", this, useStencil));
+	return (new COpenGLFBODepthTexture(texture->getSize(), "depth1", this, useStencil, isTexture));
 }
 
 
