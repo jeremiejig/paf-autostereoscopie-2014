@@ -32,12 +32,6 @@ ViewPlayer::ViewPlayer(IrrlichtDevice *device, int nbViews, bool leftInterlacing
         beginCapture(i);
     }
 
-    for (int i = 0 ; i < m_nbViews ; i++)
-    {
-        if (m_zBuffers[0] == NULL)
-            Log::info("viewplayer","prout");
-    }
-
     endCapture();
 
     video::IGPUProgrammingServices* gpu = m_device->getVideoDriver()->getGPUProgrammingServices();
@@ -67,8 +61,8 @@ ViewPlayer::ViewPlayer(IrrlichtDevice *device, int nbViews, bool leftInterlacing
 
     for (int i = 0 ; i < m_nbViews ; i++)
     {
-        //m_material.setTexture(i,m_zBuffers[i]);
-    	m_material.setTexture(i,m_textures[i]);
+        m_material.setTexture(i,m_zBuffers[i]);
+    	//m_material.setTexture(i,m_textures[i]);
     }
 
     m_material.Wireframe = false;

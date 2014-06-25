@@ -4021,7 +4021,7 @@ ITexture* COpenGLDriver::addRenderTargetTextureWithDepthBuffer(ITexture** zBuffe
 				{
 					removeDepthTexture(tex);
 				}
-
+				tex->drop();
 				*zBuffer = tex;
 				//addTexture(tex);
 			}

@@ -896,6 +896,14 @@ bool COpenGLFBODepthTexture::attach(ITexture* renderTex)
 						DepthRenderBuffer,
 						0);
 	}
+	else if(isTexture)
+	{
+		Driver->extGlFramebufferTexture2D(GL_FRAMEBUFFER_EXT,
+						GL_DEPTH_ATTACHMENT_EXT,
+						GL_TEXTURE_2D,
+						DepthRenderBuffer,
+						0);
+	}
 	else
 	{
 		// attach depth renderbuffer to depth buffer
