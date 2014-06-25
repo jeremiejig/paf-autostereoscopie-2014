@@ -1750,7 +1750,9 @@ void IrrDriver::update(float dt)
                 sprintf(marker_name, "renderPlayerView() for kart %d", i);
 
                 PROFILER_PUSH_CPU_MARKER(marker_name, 0x00, 0x00, (i+1)*60);
+                m_view_player->beginCapturePlayerView(i);
                 rg->renderPlayerView(camera, dt);
+                m_view_player->drawPlayerViewToTexture(i);
 
                 PROFILER_POP_CPU_MARKER();
             }
@@ -1804,7 +1806,9 @@ void IrrDriver::update(float dt)
                         sprintf(marker_name, "renderPlayerView() for kart %d", i);
 
                         PROFILER_PUSH_CPU_MARKER(marker_name, 0x00, 0x00, (i+1)*60);
+                        m_view_player->beginCapturePlayerView(i);
                         rg->renderPlayerView(camera, dt);
+                        m_view_player->drawPlayerViewToTexture(i);
 
                         PROFILER_POP_CPU_MARKER();
                     }
@@ -1855,7 +1859,9 @@ void IrrDriver::update(float dt)
                     sprintf(marker_name, "renderPlayerView() for kart %d", i);
 
                     PROFILER_PUSH_CPU_MARKER(marker_name, 0x00, 0x00, (i+1)*60);
+                    m_view_player->beginCapturePlayerView(i);
                     rg->renderPlayerView(camera, dt);
+                    m_view_player->drawPlayerViewToTexture(i);
 
                     PROFILER_POP_CPU_MARKER();
                 }  // for i<getNumKarts

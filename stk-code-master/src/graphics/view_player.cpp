@@ -25,10 +25,12 @@ ViewPlayer::ViewPlayer(IrrlichtDevice *device, int nbViews, bool leftInterlacing
         m_leftInterlacing = true;
 
     core::dimension2du screenSize = device->getVideoDriver()->getScreenSize() / sqrt(nbViews);
+    core::dimension2du screenSizePlayerView = device->getVideoDriver()->getScreenSize();
 
     for(int i = 0 ; i < m_nbViews ; i++)
     {
         m_textures[i] = m_device->getVideoDriver()->addRenderTargetTextureWithDepthBuffer(&m_zBuffers[i], screenSize);
+        m_textures_player_view[i] = m_device->getVideoDriver()->addRenderTargetTexture(screenSizePlayerView, "playerView"+i);
         beginCapture(i);
     }
 
@@ -120,6 +122,47 @@ void ViewPlayer::beginCapture(unsigned int views)
     /*irr_driver->getVideoDriver()->setViewPort(core::recti(0, 0,
                                                 UserConfigParams::m_width/sqrt(m_nbViews),
                                                 UserConfigParams::m_height/sqrt(m_nbViews)));*/
+}
+
+void ViewPlayer::beginCapturePlayerView(unsigned int views)
+{
+    irr_driver->getVideoDriver()->setRenderTarget(m_textures_player_view[views], true, true, 0);
+    //m_zBuffers[views] = m_device->getVideoDriver()->createDepthTexture(m_textures[views]);
+
+    /*irr_driver->getVideoDriver()->setViewPort(core::recti(0, 0,
+                                                UserConfigParams::m_width/sqrt(m_nbViews),
+                                                UserConfigParams::m_height/sqrt(m_nbViews)));*/
+}
+
+void ViewPlayer::drawPlayerViewToTexture(unsigned int views)
+{
+    u16 indices[6] = {0, 1, 2, 3, 0, 2};
+    video::IVideoDriver*    video_driver = irr_driver->getVideoDriver();
+
+    video::ITexture &textures = *(m_textures[views]);
+    video::ITexture &textures_player_view = *(m_textures_player_view[views]);
+    video_driver->setRenderTarget(&textures, false, false, 0);
+
+    // video::SMaterial origMaterial = video_driver->getMaterial2D();
+    // video::SMaterial viewPlayer;
+
+    // viewPlayer.setTexture(0,&textures_player_view);
+    // viewPlayer.ZWriteEnable = false;
+
+    u32 targetWidth = textures.getOriginalSize().Width;
+    u32 targetHeight = textures.getOriginalSize().Height;
+    u32 texWidth = textures_player_view.getOriginalSize().Width;
+    u32 texHeight = textures_player_view.getOriginalSize().Height;
+
+    core::rect<s32> rectTexture(0,0,targetWidth,targetHeight);
+    core::rect<s32> rectTexturePlayerView(0,0,texWidth,texHeight);
+
+    // video_driver->setMaterial(viewPlayer);
+    //video_driver->setTransform(video::ETS_PROJECTION, core::IdentityMatrix);
+    // video_driver->drawIndexedTriangleList(&(m_vertices.v0),
+    //                                           4, &indices[0], 2);
+    irr_driver->getVideoDriver()->draw2DImage(&textures_player_view, rectTexture, rectTexturePlayerView,
+                                                NULL, NULL, true);
 }
 
 // ----------------------------------------------------------------------------

@@ -46,6 +46,8 @@ class ViewPlayer : public video::IShaderConstantSetCallBack
         void render3D();
 
         void beginCapture(unsigned int views);
+        void beginCapturePlayerView(unsigned int views);
+        void drawPlayerViewToTexture(unsigned int views);
         void endCapture();
 
     private:
@@ -66,6 +68,7 @@ class ViewPlayer : public video::IShaderConstantSetCallBack
         bool m_leftInterlacing;
 
         video::ITexture *m_textures[8];
+        video::ITexture *m_textures_player_view[8];
         video::ITexture *m_zBuffers[8];
         video::SMaterial m_material;
 
