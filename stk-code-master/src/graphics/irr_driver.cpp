@@ -473,6 +473,12 @@ void IrrDriver::initDevice()
     // Initialize multi view rendering.
     m_view_player = new ViewPlayer(m_device, UserConfigParams::m_nbviews);
 
+    if (UserConfigParams::m_nbviews == 8)
+    {
+        m_view_player->setViewsPerTexture(2);
+        UserConfigParams::m_nbviews = 4;
+    }
+
     // set cursor visible by default (what's the default is not too clearly documented,
     // so let's decide ourselves...)
     m_device->getCursorControl()->setVisible(true);
@@ -1700,11 +1706,15 @@ void IrrDriver::update(float dt)
             my_Scene_Node = camera->getCameraSceneNode();
             PROFILER_POP_CPU_MARKER();
 
-            for(int i=0; i< 5 /*my_Scene_Node->getStereo()*/; i++)
+            for(int i=0; i < UserConfigParams::m_nbviews ; i++)
             {
             	//Tracer Monde
                 m_view_player->beginCapture(i);
-            	my_Scene_Node->setInterocularDistance(-1 + (float)i * 0.5);
+
+                //Les vues sont équiréparties autour du centre
+            	my_Scene_Node->setInterocularDistance(- (float) UserConfigParams::m_nbviews
+                                                   / 2.0 * m_view_player->getInterocularDistance()
+                                                   + i * m_view_player->getInterocularDistance());
                 //Log::info( "stereonumber" , "%d", i);
                 m_scene_manager->drawAll();
 

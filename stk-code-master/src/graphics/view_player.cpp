@@ -11,14 +11,14 @@
 #include <string>
 
 // ShaderPath is for the pixel shader
-ViewPlayer::ViewPlayer(IrrlichtDevice *device, int nbViews, bool leftInterlacing) :
+ViewPlayer::ViewPlayer(IrrlichtDevice *device, int nbViews, bool leftInterlacing, int viewsPerTexture) :
                                                             m_device(device),
                                                             m_nbViews(nbViews),
                                                             m_3DOn(true),
                                                             m_interocularDistance(0.05),
                                                             m_SVAlg(false),
                                                             m_firstView(0),
-                                                            m_repeatTextures(1)
+                                                            m_viewsPerTexture(viewsPerTexture)
 {
     if (leftInterlacing)
         leftInterlacing = 1;
@@ -165,7 +165,7 @@ void ViewPlayer::OnSetConstants(video::IMaterialRendererServices* services, s32 
     for(int i = 0 ; i < m_nbViews ; i++)
     {
         // The texture are named "tex0", "tex1"... in the shader
-        index[i]=((i+m_firstView) % m_nbViews) / m_repeatTextures;
+        index[i]=((i+m_firstView) % m_nbViews) / m_viewsPerTexture;
 
 
         std::ostringstream oss;

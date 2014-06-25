@@ -16,7 +16,7 @@ using namespace irr;
 class ViewPlayer : public video::IShaderConstantSetCallBack
 {
     public:
-        ViewPlayer(IrrlichtDevice *device, int nbViews = 8, bool leftInterlacing = false);
+        ViewPlayer(IrrlichtDevice *device, int nbViews = 8, bool leftInterlacing = false, int viewsPerTexture = 1);
 
         virtual ~ViewPlayer();
 
@@ -35,7 +35,7 @@ class ViewPlayer : public video::IShaderConstantSetCallBack
         void set3D      (bool is3DOn)   {m_3DOn = is3DOn;}
         void setSVAlg   (bool SVAlg)    {m_SVAlg = SVAlg;}
         void setFirstView       (int firstView)     {m_firstView = firstView;}
-        void setViewsPerTexture (int repeatTextures){m_repeatTextures = repeatTextures;}
+        void setViewsPerTexture (int viewsPerTexture){m_viewsPerTexture = viewsPerTexture;}
 
 
 
@@ -60,8 +60,7 @@ class ViewPlayer : public video::IShaderConstantSetCallBack
         // Index of the first view (left)
         int m_firstView;
 
-        // Number of views per texture
-        int m_repeatTextures;
+        int m_viewsPerTexture;
 
         // 1 if it's towards the left, else -1
         int m_leftInterlacing;
