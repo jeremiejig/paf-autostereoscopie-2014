@@ -67,6 +67,9 @@ class ViewPlayer : public video::IShaderConstantSetCallBack
         // 1 if it's towards the left, else -1
         bool m_leftInterlacing;
 
+        float m_znear;
+        float m_zfar;
+
         video::ITexture *m_textures[8];
         video::ITexture *m_textures_player_view[8];
         video::ITexture *m_zBuffers[8];

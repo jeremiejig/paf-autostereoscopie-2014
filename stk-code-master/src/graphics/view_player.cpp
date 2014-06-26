@@ -3,6 +3,8 @@
 #include "config/user_config.hpp"
 #include "graphics/irr_driver.hpp"
 #include "io/file_manager.hpp"
+#include "modes/world.hpp"
+#include "tracks/track.hpp"
 #include "utils/log.hpp"
 
 #include <sstream>
@@ -19,7 +21,9 @@ ViewPlayer::ViewPlayer(IrrlichtDevice *device, int nbViews, bool leftInterlacing
                                                             m_SVAlg(false),
                                                             m_firstView(0),
                                                             m_viewsPerTexture(viewsPerTexture),
-                                                            m_leftInterlacing(leftInterlacing)
+                                                            m_leftInterlacing(leftInterlacing),
+                                                            znear = 1.0,
+                                                            m_zfar = 5000.0
 {
     if (nbViews == 5)
         m_leftInterlacing = true;
@@ -79,6 +83,8 @@ ViewPlayer::~ViewPlayer()
 
 void ViewPlayer::reset()
 {
+        m_znear = 1.0;
+        m_zfar = World::getWorld()->getTrack()->getCameraFar();
 
 
         //const core::recti &vp = Camera::getCamera(i)->getViewport();

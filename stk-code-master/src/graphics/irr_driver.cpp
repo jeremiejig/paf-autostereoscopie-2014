@@ -1708,7 +1708,6 @@ void IrrDriver::update(float dt)
 
             for(int i=0; i < UserConfigParams::m_nbviews ; i++)
             {
-                float pas = 0.1;
             	//Tracer Monde
                 m_view_player->beginCapture(i);
 
