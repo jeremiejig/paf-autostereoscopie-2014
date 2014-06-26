@@ -22,8 +22,8 @@ ViewPlayer::ViewPlayer(IrrlichtDevice *device, int nbViews, bool leftInterlacing
                                                             m_firstView(0),
                                                             m_viewsPerTexture(viewsPerTexture),
                                                             m_leftInterlacing(leftInterlacing),
-                                                            znear = 1.0,
-                                                            m_zfar = 5000.0
+                                                            m_znear(1.0),
+                                                            m_zfar(5000.0)
 {
     if (nbViews == 5)
         m_leftInterlacing = true;
@@ -67,7 +67,7 @@ ViewPlayer::ViewPlayer(IrrlichtDevice *device, int nbViews, bool leftInterlacing
 
     for (int i = 0 ; i < m_nbViews ; i++)
     {
-        //m_material.setTexture(i,m_zBuffers[i]);
+        // m_material.setTexture(i,m_zBuffers[i]);
     	m_material.setTexture(i,m_textures[i]);
     }
 
