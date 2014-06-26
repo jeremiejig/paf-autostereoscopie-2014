@@ -27,7 +27,7 @@ class ViewPlayer : public video::IShaderConstantSetCallBack
         video::SMaterial getProcessedTexture() {return m_material;}
         float getInterocularDistance() {return m_interocularDistance;}
         bool is3DOn()   {return m_3DOn;}
-        bool getSVAlg() {return m_SVAlg;}
+        bool isActiveSVAlg() {return m_SVAlg;}
 
 
         //! Setters

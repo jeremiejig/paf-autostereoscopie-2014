@@ -47,8 +47,13 @@ ViewPlayer::ViewPlayer(IrrlichtDevice *device, int nbViews, bool leftInterlacing
 
     if (gpu)
     {
+        std::string svalg_name("");
+        if(m_nbViews == 8)
+            svalg_name += "SVAlg.8views.frag";
+        else
+            svalg_name += "SVAlg.frag";
         renderfromdepthShader = gpu->addHighLevelShaderMaterialFromFiles(   (file_manager->getShaderDir() + "shader3D.vert").c_str(),  "main", irr::video::EVST_VS_1_1,
-                                                                            (file_manager->getShaderDir() + "SVAlg.frag").c_str(),     "main", irr::video::EPST_PS_1_1,
+                                                                            (file_manager->getShaderDir() + svalg_name).c_str(),     "main", irr::video::EPST_PS_1_1,
                                                                             this, irr::video::EMT_SOLID);
 
         interlacingShader = gpu->addHighLevelShaderMaterialFromFiles(   (file_manager->getShaderDir() + "shader3D.vert").c_str(), "main", irr::video::EVST_VS_1_1,
@@ -214,14 +219,17 @@ void ViewPlayer::OnSetConstants(video::IMaterialRendererServices* services, s32 
     
     if(m_SVAlg)
     {
-        index[0] = 0;
-        index[1] = 1;
         float Width = (float)m_textures[0]->getOriginalSize().Width;
         services->setPixelShaderConstant((std::string("width")).c_str() ,(&Width), 1);
         services->setPixelShaderConstant((std::string("ZFAR")).c_str() ,(&m_zfar), 1);
         services->setPixelShaderConstant((std::string("ZNEAR")).c_str() ,(&m_znear), 1);
-        services->setPixelShaderConstant((std::string("tex0")).c_str() ,(&index[0]), 1);
-        services->setPixelShaderConstant((std::string("depth0")).c_str() ,(&index[1]), 1);
+
+        for(int i=0 ; i < 2 ; i++){
+            index[i] = i*2;
+            index[i+1] = i*2+1;
+            services->setPixelShaderConstant((core::stringc("tex") + core::stringc(i)).c_str() ,(&index[i]), 1);
+            services->setPixelShaderConstant((core::stringc("depth") + core::stringc(i)).c_str() ,(&index[i+1]), 1);
+        }
     }
     else
     {

@@ -1694,7 +1694,7 @@ void IrrDriver::update(float dt)
             scene::ICameraSceneNode *my_Scene_Node;
             int nb_loop;
 
-            if(m_view_player->getSVAlg())
+            if(m_view_player->isActiveSVAlg())
                 nb_loop=1;
             else
                 nb_loop=UserConfigParams::m_nbviews;
@@ -1765,58 +1765,50 @@ void IrrDriver::update(float dt)
 
         else
         {
-            int max_loop_multiplier = m_view_player->is3DOn() ? 4 : 1 ;
+            int max_loop_multiplier = m_view_player->is3DOn() ? UserConfigParams::m_nbviews/Camera::getNumCameras() : 1 ;
+            max_loop_multiplier = m_view_player->isActiveSVAlg() ? 1 : max_loop_multiplier ;
             //Mode multiplayer
             for(unsigned int i=0; i<Camera::getNumCameras() * max_loop_multiplier; i++)
             {
                 if (m_view_player->is3DOn())
                 {
-                    // Generation of the second image by the SV algorithm
-                    if (m_view_player->getSVAlg() && i%2 == 1)
-                    {
+                    Camera *camera = Camera::getCamera(i/max_loop_multiplier);
+                    scene::ICameraSceneNode *my_Scene_Node;
 
-                    }
+#ifdef ENABLE_PROFILER
+                    std::ostringstream oss;
+                    oss << "drawAll() for kart " << i / 2 << std::flush;
+                    PROFILER_PUSH_CPU_MARKER(oss.str().c_str(), (0+1)*60,
+                                         0x00, 0x00);
+#endif
+                    camera->activate();
+                    rg->preRenderCallback(camera);   // adjusts start referee
 
-                    else
-                    {
-                        Camera *camera = Camera::getCamera(i/max_loop_multiplier);
-                        scene::ICameraSceneNode *my_Scene_Node;
+                    //First View
+                    my_Scene_Node = camera->getCameraSceneNode();
+                    PROFILER_POP_CPU_MARKER();
+                    m_view_player->beginCapture(i);
 
-    #ifdef ENABLE_PROFILER
-                        std::ostringstream oss;
-                        oss << "drawAll() for kart " << i / 2 << std::flush;
-                        PROFILER_PUSH_CPU_MARKER(oss.str().c_str(), (0+1)*60,
-                                             0x00, 0x00);
-    #endif
-                        camera->activate();
-                        rg->preRenderCallback(camera);   // adjusts start referee
+                    my_Scene_Node->setInterocularDistance(max_loop_multiplier * m_view_player->getInterocularDistance()/2 - (float)(i%max_loop_multiplier) * m_view_player->getInterocularDistance());
+                    //Log::info( "stereonumber" , "%d", i);
+                    m_scene_manager->drawAll();
 
-                        //First View
-                        my_Scene_Node = camera->getCameraSceneNode();
-                        PROFILER_POP_CPU_MARKER();
-                        m_view_player->beginCapture(i);
+                    // Note that drawAll must be called before rendering
+                    // the bullet debug view, since otherwise the camera
+                    // is not set up properly. This is only used for
+                    // the bullet debug view.
+                    if (UserConfigParams::m_artist_debug_mode)
+                        World::getWorld()->getPhysics()->draw();
 
-                        my_Scene_Node->setInterocularDistance(max_loop_multiplier * m_view_player->getInterocularDistance()/2 - (float)(i%max_loop_multiplier) * m_view_player->getInterocularDistance());
-                        //Log::info( "stereonumber" , "%d", i);
-                        m_scene_manager->drawAll();
+                    char marker_name[100];
+                    sprintf(marker_name, "renderPlayerView() for kart %d", i);
 
-                        // Note that drawAll must be called before rendering
-                        // the bullet debug view, since otherwise the camera
-                        // is not set up properly. This is only used for
-                        // the bullet debug view.
-                        if (UserConfigParams::m_artist_debug_mode)
-                            World::getWorld()->getPhysics()->draw();
+                    PROFILER_PUSH_CPU_MARKER(marker_name, 0x00, 0x00, (i+1)*60);
+                    m_view_player->beginCapturePlayerView(i);
+                    rg->renderPlayerView(camera, dt);
+                    m_view_player->drawPlayerViewToTexture(i);
 
-                        char marker_name[100];
-                        sprintf(marker_name, "renderPlayerView() for kart %d", i);
-
-                        PROFILER_PUSH_CPU_MARKER(marker_name, 0x00, 0x00, (i+1)*60);
-                        m_view_player->beginCapturePlayerView(i);
-                        rg->renderPlayerView(camera, dt);
-                        m_view_player->drawPlayerViewToTexture(i);
-
-                        PROFILER_POP_CPU_MARKER();
-                    }
+                    PROFILER_POP_CPU_MARKER();
                 }
 
                 else

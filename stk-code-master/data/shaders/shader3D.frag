@@ -29,46 +29,28 @@ void getTextureSample(in int texID, out vec4 color) {
 
 void main()
 {
-  // int x = int(gl_FragCoord.x + 0.5);
-  // int y = int(gl_FragCoord.y + 0.5);
-  // int modulox = int(mod(x,nbviews));
-  // int moduloy = int(mod(y,nbviews));
+  int x = int(gl_FragCoord.x - 0.5);
+  int y = int(gl_FragCoord.y - 0.5);
+  int moduloy = int(mod(y,nbviews));
 
-  // int viewLine;
+  int viewLine;
 
-  // if (leftInterlacing)
-  //   viewLine = nbviews - 1 - moduloy ;
-  // else
-  //   viewLine = moduloy;
-  // int viewPix = int(mod(viewLine + 3 * modulox , nbviews));
-  // int viewR = viewPix - nbviews*(viewPix/nbviews) ;
-  // int viewG = viewPix + 1 - nbviews*((viewPix +1)/nbviews);
-  // int viewB = viewPix + 2 - nbviews*((viewPix +2)/nbviews);
-
-  // if(viewR >= nbviews) viewR -= nbviews;
-  // if(viewG >= nbviews) viewG -= nbviews;
-  // if(viewB >= nbviews) viewB -= nbviews;
-
-  int x = int(gl_FragCoord.x + 0.5);
-  int y = int(gl_FragCoord.y + 0.5) ;
-  int modulox = x/5;
-  int moduloy = y/5;
-  modulox = x - 5 * modulox;
-  moduloy = y - 5 * moduloy;
-
-  int viewLine = 4 - moduloy ;
-  int viewPix = viewLine + 3 * modulox ;
-  int viewR = viewPix - 5*(viewPix/5) ;
-  int viewG = viewPix + 1 - 5*((viewPix +1)/5);
-  int viewB = viewPix + 2 - 5*((viewPix +2)/5);
+  if (leftInterlacing)
+    viewLine = nbviews - 1 - moduloy ;
+  else
+    viewLine = moduloy;
+  int viewPix = viewLine + 3 * x;
+  int viewR = int(mod(viewPix,nbviews));
+  int viewG = int(mod(viewPix + 1,nbviews));
+  int viewB = int(mod(viewPix + 2,nbviews));
 
   vec4 colR, colG, colB ;
 
   getTextureSample(viewR, colR) ;
-  gl_FragColor.r = colR.r ;
   getTextureSample(viewG, colG) ;
-  gl_FragColor.g = colR.g ;
   getTextureSample(viewB, colB) ;
-  gl_FragColor.b = colR.b ;
+  gl_FragColor.r = colR.r ;
+  gl_FragColor.g = colG.g ;
+  gl_FragColor.b = colB.b ;
 }
 
