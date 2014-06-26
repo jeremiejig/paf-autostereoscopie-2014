@@ -74,6 +74,7 @@ class ViewPlayer : public video::IShaderConstantSetCallBack
         video::ITexture *m_textures_player_view[8];
         video::ITexture *m_zBuffers[8];
         video::SMaterial m_material;
+        video::SMaterial m_material_fromDepth;
 
         struct Quad { video::S3DVertex v0, v1, v2, v3; };
 

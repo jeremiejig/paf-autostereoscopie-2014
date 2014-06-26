@@ -1692,6 +1692,12 @@ void IrrDriver::update(float dt)
         {
             Camera *camera = Camera::getCamera(0);
             scene::ICameraSceneNode *my_Scene_Node;
+            int nb_loop;
+
+            if(m_view_player->getSVAlg())
+                nb_loop=1;
+            else
+                nb_loop=UserConfigParams::m_nbviews;
 
 #ifdef ENABLE_PROFILER
             std::ostringstream oss;
@@ -1706,13 +1712,13 @@ void IrrDriver::update(float dt)
             my_Scene_Node = camera->getCameraSceneNode();
             PROFILER_POP_CPU_MARKER();
 
-            for(int i=0; i < UserConfigParams::m_nbviews ; i++)
+            for(int i=0; i < nb_loop ; i++)
             {
             	//Tracer Monde
                 m_view_player->beginCapture(i);
 
                 //Les vues sont équiréparties autour du centre
-            	my_Scene_Node->setInterocularDistance((float) UserConfigParams::m_nbviews
+            	my_Scene_Node->setInterocularDistance((float) nb_loop
                                                    / 2.0 * m_view_player->getInterocularDistance()
                                                    - i * m_view_player->getInterocularDistance());
                 //Log::info( "stereonumber" , "%d", i);

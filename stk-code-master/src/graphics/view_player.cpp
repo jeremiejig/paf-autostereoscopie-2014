@@ -18,7 +18,7 @@ ViewPlayer::ViewPlayer(IrrlichtDevice *device, int nbViews, bool leftInterlacing
                                                             m_nbViews(nbViews),
                                                             m_3DOn(true),
                                                             m_interocularDistance(0.05),
-                                                            m_SVAlg(false),
+                                                            m_SVAlg(true),
                                                             m_firstView(0),
                                                             m_viewsPerTexture(viewsPerTexture),
                                                             m_leftInterlacing(leftInterlacing),
@@ -43,22 +43,17 @@ ViewPlayer::ViewPlayer(IrrlichtDevice *device, int nbViews, bool leftInterlacing
     video::IGPUProgrammingServices* gpu = m_device->getVideoDriver()->getGPUProgrammingServices();
 
     s32 interlacingShader = 0;
+    s32 renderfromdepthShader = 0;
 
     if (gpu)
     {
-        if (m_SVAlg)
-        {
-            interlacingShader = gpu->addHighLevelShaderMaterialFromFiles(   (file_manager->getShaderDir() + "shader3D.vert").c_str(),  "main", irr::video::EVST_VS_1_1,
+        renderfromdepthShader = gpu->addHighLevelShaderMaterialFromFiles(   (file_manager->getShaderDir() + "shader3D.vert").c_str(),  "main", irr::video::EVST_VS_1_1,
                                                                             (file_manager->getShaderDir() + "SVAlg.frag").c_str(),     "main", irr::video::EPST_PS_1_1,
                                                                             this, irr::video::EMT_SOLID);
-        }
 
-        else
-        {
-            interlacingShader = gpu->addHighLevelShaderMaterialFromFiles(   (file_manager->getShaderDir() + "shader3D.vert").c_str(), "main", irr::video::EVST_VS_1_1,
-                                                                            (file_manager->getShaderDir() + "shader3D.frag").c_str(), "main", irr::video::EPST_PS_1_1,
-                                                                            this, irr::video::EMT_SOLID);
-        }
+        interlacingShader = gpu->addHighLevelShaderMaterialFromFiles(   (file_manager->getShaderDir() + "shader3D.vert").c_str(), "main", irr::video::EVST_VS_1_1,
+                                                                        (file_manager->getShaderDir() + "shader3D.frag").c_str(), "main", irr::video::EPST_PS_1_1,
+                                                                        this, irr::video::EMT_SOLID);
     }
 
 
@@ -73,7 +68,15 @@ ViewPlayer::ViewPlayer(IrrlichtDevice *device, int nbViews, bool leftInterlacing
 
     m_material.Wireframe = false;
     m_material.Lighting = false;
-    m_material.ZWriteEnable = true;
+    m_material.ZWriteEnable = false;
+
+    //Shader render from depth
+    m_material_fromDepth.MaterialType = (video::E_MATERIAL_TYPE)renderfromdepthShader;
+    for (int i = 0 ; i < m_nbViews/2 ; i++)
+    {
+        m_material_fromDepth.setTexture(i*2,m_textures[i]);
+        m_material_fromDepth.setTexture(i*2+1,m_zBuffers[i]);
+    }
 }
 
 ViewPlayer::~ViewPlayer()
@@ -193,6 +196,9 @@ void ViewPlayer::render3D()
 
         // Draw the fullscreen quad while applying the corresponding
         // post-processing shaders
+    if(m_SVAlg)
+        video_driver->setMaterial(m_material_fromDepth);
+    else
         video_driver->setMaterial(m_material);
         video_driver->drawIndexedTriangleList(&(m_vertices.v0),
                                               4, &indices[0], 2);
@@ -205,20 +211,30 @@ void ViewPlayer::OnSetConstants(video::IMaterialRendererServices* services, s32 
     int index[8];
     services->setPixelShaderConstant((std::string("nbviews")).c_str() ,(&m_nbViews), 1);
     services->setPixelShaderConstant((std::string("leftInterlacing")).c_str() ,(&m_leftInterlacing), 1);
-
-    for(int i = 0 ; i < m_nbViews ; i++)
+    
+    if(m_SVAlg)
     {
-        // The texture are named "tex0", "tex1"... in the shader
-        index[i]=((i+m_firstView) % m_nbViews) / m_viewsPerTexture;
-
-
-        std::ostringstream oss;
-        oss << i;
-        std::string iString = oss.str();
-        services->setPixelShaderConstant((std::string("tex") + iString).c_str() ,(&index[i]), 1);
-        /*oss << m_index[i];
-        iString = oss.str();
-        Log::info("shader tex", iString.c_str());*/
+        index[0] = 0;
+        index[1] = 1;
+        float Width = (float)m_textures[0]->getOriginalSize().Width;
+        services->setPixelShaderConstant((std::string("width")).c_str() ,(&Width), 1);
+        services->setPixelShaderConstant((std::string("ZFAR")).c_str() ,(&m_zfar), 1);
+        services->setPixelShaderConstant((std::string("ZNEAR")).c_str() ,(&m_znear), 1);
+        services->setPixelShaderConstant((std::string("tex0")).c_str() ,(&index[0]), 1);
+        services->setPixelShaderConstant((std::string("depth0")).c_str() ,(&index[1]), 1);
+    }
+    else
+    {
+    
+        for(int i = 0 ; i < m_nbViews ; i++)
+        {
+            // The texture are named "tex0", "tex1"... in the shader
+            index[i]=((i+m_firstView) % m_nbViews) / m_viewsPerTexture;
+            std::ostringstream oss;
+            oss << i;
+            std::string iString = oss.str();
+            services->setPixelShaderConstant((std::string("tex") + iString).c_str() ,(&index[i]), 1);
+        }
     }
 
 
