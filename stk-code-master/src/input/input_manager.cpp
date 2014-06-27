@@ -136,13 +136,19 @@ void InputManager::handleStaticAction(int key, int value)
         case KEY_PRIOR:
         {
             if(value)
-                irr_driver->getViewPlayer()->setInterocularDistancePlus(0.01);
+                if(control_is_pressed)
+                    irr_driver->getViewPlayer()->setInterocularDistancePlus(0.001);
+                else
+                    irr_driver->getViewPlayer()->setInterocularDistancePlus(0.01);
             break;
         }
         case KEY_NEXT:
         {
             if(value)
-                irr_driver->getViewPlayer()->setInterocularDistanceMinus(0.01);
+                if(control_is_pressed)
+                    irr_driver->getViewPlayer()->setInterocularDistanceMinus(0.001);
+                else
+                    irr_driver->getViewPlayer()->setInterocularDistanceMinus(0.01);
             break;
         }
         case KEY_CONTROL:
