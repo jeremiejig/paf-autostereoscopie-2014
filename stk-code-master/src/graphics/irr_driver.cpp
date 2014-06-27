@@ -1347,6 +1347,7 @@ void IrrDriver::displayFPS()
     const int fps         = m_video_driver->getFPS();
     const float kilotris  = m_video_driver->getPrimitiveCountDrawn(0)
                                 * (1.f / 1000.f);
+    const float interocularDistance = m_view_player->getInterocularDistance();
 
     if (min > fps && fps > 1) min = fps; // Start moments sometimes give useless 1
     if (max < fps) max = fps;
@@ -1357,13 +1358,13 @@ void IrrDriver::displayFPS()
 
     if (UserConfigParams::m_artist_debug_mode)
     {
-        sprintf(buffer, "FPS: %i/%i/%i - %.2f/%.2f/%.2f KTris",
-                min, fps, max, low, kilotris, high);
+        sprintf(buffer, "FPS: %i/%i/%i - %.2f/%.2f/%.2f KTris - Delta: %f",
+                min, fps, max, low, kilotris, high, interocularDistance);
     }
     else
     {
-        sprintf(buffer, "FPS: %i/%i/%i - %i KTris", min, fps, max,
-                (int)round(kilotris));
+        sprintf(buffer, "FPS: %i/%i/%i - %i KTris - Delta: %f", min, fps, max,
+                (int)round(kilotris), interocularDistance);
     }
 
     core::stringw fpsString = buffer;
