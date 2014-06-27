@@ -29,9 +29,13 @@ void getTextureSample(in int texID, out vec4 color) {
 
 void main()
 {
-  int x = int(gl_FragCoord.x - 0.5);
-  int y = int(gl_FragCoord.y - 0.5);
-  int moduloy = int(mod(y,nbviews));
+  //modulo (mod(int x, int y)) ne semble pas fnctionner correctement (intel)
+  int x = int(gl_FragCoord.x + 0.5);
+  int y = int(gl_FragCoord.y + 0.5) ;
+  int modulox = x/nbviews;
+  int moduloy = y/nbviews;
+  modulox = x - nbviews * modulox;
+  moduloy = y - nbviews * moduloy;
 
   int viewLine;
 
@@ -39,10 +43,10 @@ void main()
     viewLine = nbviews - 1 - moduloy ;
   else
     viewLine = moduloy;
-  int viewPix = viewLine + 3 * x;
-  int viewR = int(mod(viewPix,nbviews));
-  int viewG = int(mod(viewPix + 1,nbviews));
-  int viewB = int(mod(viewPix + 2,nbviews));
+  int viewPix = viewLine + 3 * modulox ;
+  int viewR = viewPix - nbviews*(viewPix/nbviews) ;
+  int viewG = viewPix + 1 - nbviews*((viewPix +1)/nbviews);
+  int viewB = viewPix + 2 - nbviews*((viewPix +2)/nbviews);
 
   vec4 colR, colG, colB ;
 

@@ -534,6 +534,9 @@ void InputManager::dispatchInput(Input::InputType type, int deviceID,
         bool quit = true;
         if(type == Input::IT_KEYBOARD){
             switch(button){
+                case KEY_CONTROL:
+                case KEY_RCONTROL:
+                case KEY_LCONTROL:
                 case KEY_NEXT:
                 case KEY_PRIOR:
                 case KEY_HOME:
