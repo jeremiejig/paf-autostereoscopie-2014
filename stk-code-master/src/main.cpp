@@ -425,6 +425,8 @@ void cmdLineHelp(char* invocation)
     "       --demo-startrace   Skip the ready-set-go phase (everywhere).\n"
     "       --ghost            Replay ghost data together with one player kart.\n"
     "       --nbviews n        Number of views of the display (PAF).\n"
+    "       --shader           Will render via shader (soft by default).\n"
+    "       --angle n          Distance between two camera (soft rendering).\n"
     // "       --history          Replay history file 'history.dat'.\n"
     // "       --history=n        Replay history file 'history.dat' using:\n"
     // "                            n=1: recorded positions\n"
@@ -538,6 +540,18 @@ int handleCmdLinePreliminary(int argc, char **argv)
             int nb;
             StringUtils::fromString(argv[i+1], nb);
             UserConfigParams::m_nbviews = nb;
+            i++;
+        }
+        else if( !strcmp(argv[i], "--shader"))
+        {
+            UserConfigParams::m_SVAlg = true;
+            i++;
+        }
+        else if( !strcmp(argv[i], "--angle") && i+1<argc)
+        {
+            float nb;
+            StringUtils::fromString(argv[i+1], nb);
+            UserConfigParams::m_interocularDistance = nb;
             i++;
         }
         else if( !strcmp(argv[i], "--no-graphics") || !strncmp(argv[i], "--list-", 7) ||
@@ -1110,6 +1124,8 @@ int handleCmdLine(int argc, char **argv)
         else if( !strcmp(argv[i], "--windowed")   || !strcmp(argv[i], "-w")) {}
         else if( !strcmp(argv[i], "--version")    || !strcmp(argv[i], "-v")) {}
         else if( !strcmp(argv[i], "--nbviews") && i+1<argc) { i++; }
+        else if( !strcmp(argv[i], "--angle") && i+1<argc) { i++; }
+        else if( !strcmp(argv[i], "--shader")) {}
 #ifdef __APPLE__
         // on OS X, sometimes the Finder will pass a -psn* something parameter
         // to the application

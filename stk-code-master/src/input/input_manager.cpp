@@ -23,6 +23,7 @@
 #include "guiengine/modaldialog.hpp"
 #include "guiengine/screen.hpp"
 #include "graphics/irr_driver.hpp"
+#include "graphics/view_player.hpp"
 #include "input/device_manager.hpp"
 #include "input/input.hpp"
 #include "karts/controller/controller.hpp"
@@ -125,6 +126,25 @@ void InputManager::handleStaticAction(int key, int value)
             break;
         }
 #endif
+        case KEY_F1:
+        case KEY_END:
+        {
+            if(value)
+                irr_driver->getViewPlayer()->switchSVAlg();
+            break;
+        }
+        case KEY_PRIOR:
+        {
+            if(value)
+                irr_driver->getViewPlayer()->setInterocularDistancePlus(0.01);
+            break;
+        }
+        case KEY_NEXT:
+        {
+            if(value)
+                irr_driver->getViewPlayer()->setInterocularDistanceMinus(0.01);
+            break;
+        }
         case KEY_CONTROL:
         case KEY_RCONTROL:
         case KEY_LCONTROL:
@@ -162,23 +182,23 @@ void InputManager::handleStaticAction(int key, int value)
                 irr_driver->requestScreenshot();
             break;
 
-        case KEY_F1:
-            if (UserConfigParams::m_artist_debug_mode && world)
-            {
-                AbstractKart* kart = world->getLocalPlayerKart(0);
+//         case KEY_F1:
+//             if (UserConfigParams::m_artist_debug_mode && world)
+//             {
+//                 AbstractKart* kart = world->getLocalPlayerKart(0);
                 
-                if (control_is_pressed)
-                    kart->setPowerup(PowerupManager::POWERUP_SWATTER, 10000);
-                else
-                    kart->setPowerup(PowerupManager::POWERUP_RUBBERBALL, 10000);
+//                 if (control_is_pressed)
+//                     kart->setPowerup(PowerupManager::POWERUP_SWATTER, 10000);
+//                 else
+//                     kart->setPowerup(PowerupManager::POWERUP_RUBBERBALL, 10000);
                     
-#ifdef FORCE_RESCUE_ON_FIRST_KART
-                // Can be useful for debugging places where the AI gets into
-                // a rescue loop: rescue, drive, crash, rescue to same place
-                world->getKart(0)->forceRescue();
-#endif
-            }
-            break;
+// #ifdef FORCE_RESCUE_ON_FIRST_KART
+//                 // Can be useful for debugging places where the AI gets into
+//                 // a rescue loop: rescue, drive, crash, rescue to same place
+//                 world->getKart(0)->forceRescue();
+// #endif
+//             }
+//             break;
         case KEY_F2:
             if (UserConfigParams::m_artist_debug_mode && world)
             {
@@ -505,9 +525,26 @@ void InputManager::dispatchInput(Input::InputType type, int deviceID,
     // Abort demo mode if a key is pressed during the race in demo mode
     if(dynamic_cast<DemoWorld*>(World::getWorld()))
     {
-        race_manager->exitRace();
-        StateManager::get()->resetAndGoToScreen(MainMenuScreen::getInstance());
-        return;
+        bool quit = true;
+        if(type == Input::IT_KEYBOARD){
+            switch(button){
+                case KEY_NEXT:
+                case KEY_PRIOR:
+                case KEY_HOME:
+                case KEY_END:
+                case KEY_F1:
+                {
+                    quit=false;
+                    break;
+                }
+            }
+        }
+        if(quit)
+        {
+            race_manager->exitRace();
+            StateManager::get()->resetAndGoToScreen(MainMenuScreen::getInstance());
+            return;
+        }
     }
 
     StateManager::ActivePlayer*   player = NULL;

@@ -471,7 +471,7 @@ void IrrDriver::initDevice()
     m_post_processing = new PostProcessing(m_video_driver);
 
     // Initialize multi view rendering.
-    m_view_player = new ViewPlayer(m_device, UserConfigParams::m_nbviews);
+    m_view_player = new ViewPlayer(m_device, UserConfigParams::m_nbviews, UserConfigParams::m_SVAlg, UserConfigParams::m_interocularDistance);
 
     if (UserConfigParams::m_nbviews == 8)
     {
@@ -1694,7 +1694,7 @@ void IrrDriver::update(float dt)
             scene::ICameraSceneNode *my_Scene_Node;
             int nb_loop;
 
-            if(m_view_player->isActiveSVAlg())
+            if(m_view_player->isActiveSVAlg() || !m_view_player->is3DOn())
                 nb_loop=1;
             else
                 nb_loop=UserConfigParams::m_nbviews;

@@ -8,6 +8,7 @@
 #include "SMaterial.h"
 #include "S3DVertex.h"
 //#include "graphics/irr_driver.hpp"
+#include "utils/log.hpp"
 
 
 
@@ -16,7 +17,7 @@ using namespace irr;
 class ViewPlayer : public video::IShaderConstantSetCallBack
 {
     public:
-        ViewPlayer(IrrlichtDevice *device, int nbViews = 8, bool leftInterlacing = false, int viewsPerTexture = 1);
+        ViewPlayer(IrrlichtDevice *device, int nbViews = 8, bool SVAlg = false, float interocularDistance = 0.05, bool leftInterlacing = false, int viewsPerTexture = 1);
 
         virtual ~ViewPlayer();
 
@@ -27,13 +28,15 @@ class ViewPlayer : public video::IShaderConstantSetCallBack
         video::SMaterial getProcessedTexture() {return m_material;}
         float getInterocularDistance() {return m_interocularDistance;}
         bool is3DOn()   {return m_3DOn;}
-        bool isActiveSVAlg() {return m_SVAlg;}
+        bool isActiveSVAlg() {return (m_3DOn & m_SVAlg);}
 
 
         //! Setters
 
-        void set3D      (bool is3DOn)   {m_3DOn = is3DOn;}
-        void setSVAlg   (bool SVAlg)    {m_SVAlg = SVAlg;}
+        void switch3D      ()   {m_3DOn = !m_3DOn;}
+        void switchSVAlg   ()    {m_SVAlg = !m_SVAlg;}
+        void setInterocularDistancePlus   (float amount)    {m_interocularDistance += amount;}
+        void setInterocularDistanceMinus   (float amount)    {m_interocularDistance -= amount;}
         void setFirstView       (int firstView)     {m_firstView = firstView;}
         void setViewsPerTexture (int viewsPerTexture){m_viewsPerTexture = viewsPerTexture;}
 

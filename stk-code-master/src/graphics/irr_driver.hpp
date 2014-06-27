@@ -276,6 +276,9 @@ public:
     /** Returns the irrlicht video driver. */
     video::IVideoDriver  *getVideoDriver()  const { return m_video_driver;  }
     // ------------------------------------------------------------------------
+    /** Returns the irrlicht video driver. */
+    ViewPlayer  *getViewPlayer()  const { return m_view_player;  }
+    // ------------------------------------------------------------------------
     /** Returns the irrlicht scene manager. */
     scene::ISceneManager *getSceneManager() const { return m_scene_manager; }
     // ------------------------------------------------------------------------
