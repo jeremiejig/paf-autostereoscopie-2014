@@ -17,7 +17,7 @@ using namespace irr;
 class ViewPlayer : public video::IShaderConstantSetCallBack
 {
     public:
-        ViewPlayer(IrrlichtDevice *device, int nbViews = 8, bool SVAlg = false, float interocularDistance = 0.05, bool leftInterlacing = false, int viewsPerTexture = 1);
+        ViewPlayer(IrrlichtDevice *device, int nbViews = 8, float interocularDistance = 0.05, bool leftInterlacing = false, int viewsPerTexture = 1);
 
         virtual ~ViewPlayer();
 
@@ -34,7 +34,7 @@ class ViewPlayer : public video::IShaderConstantSetCallBack
         //! Setters
 
         void switch3D      ()   {m_3DOn = !m_3DOn;}
-        void switchSVAlg   ()    {m_SVAlg = !m_SVAlg;}
+        static void switchSVAlg   ()    {m_SVAlg = !m_SVAlg;}
         void setInterocularDistancePlus   (float amount)    {m_interocularDistance += amount;}
         void setInterocularDistanceMinus   (float amount)    {m_interocularDistance -= amount;}
         void setFirstView       (int firstView)     {m_firstView = firstView;}
@@ -60,7 +60,7 @@ class ViewPlayer : public video::IShaderConstantSetCallBack
         float m_interocularDistance;
 
         // Use Sormain-Vaulet algorithm
-        bool m_SVAlg;
+        static bool m_SVAlg;
 
         // Index of the first view (left)
         int m_firstView;

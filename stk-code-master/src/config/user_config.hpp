@@ -407,9 +407,6 @@ namespace UserConfigParams
     PARAM_PREFIX FloatUserConfigParam       m_interocularDistance
             PARAM_DEFAULT(  FloatUserConfigParam(0.05, "interocularDistance", &m_video_group,
                                            "Distance between to render view of a player") );
-    PARAM_PREFIX BoolUserConfigParam        m_SVAlg
-            PARAM_DEFAULT(  BoolUserConfigParam(false, "SVAlg", &m_video_group,
-                                           "Shader or soft generation") );
     PARAM_PREFIX IntUserConfigParam         m_prev_width
             PARAM_DEFAULT(  IntUserConfigParam(1024, "prev_width",
                             &m_video_group, "Previous screen/window width") );

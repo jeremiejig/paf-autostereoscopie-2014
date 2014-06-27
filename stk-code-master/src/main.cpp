@@ -152,6 +152,7 @@
 #include "graphics/material_manager.hpp"
 #include "graphics/particle_kind_manager.hpp"
 #include "graphics/referee.hpp"
+#include "graphics/view_player.hpp"
 #include "guiengine/engine.hpp"
 #include "guiengine/event_handler.hpp"
 #include "input/input_manager.hpp"
@@ -540,11 +541,6 @@ int handleCmdLinePreliminary(int argc, char **argv)
             int nb;
             StringUtils::fromString(argv[i+1], nb);
             UserConfigParams::m_nbviews = nb;
-            i++;
-        }
-        else if( !strcmp(argv[i], "--shader"))
-        {
-            UserConfigParams::m_SVAlg = true;
             i++;
         }
         else if( !strcmp(argv[i], "--angle") && i+1<argc)
@@ -1095,6 +1091,10 @@ int handleCmdLine(int argc, char **argv)
         {
             UserConfigParams::m_race_now = true;
         }
+        else if( !strcmp(argv[i], "--shader"))
+        {
+            ViewPlayer::switchSVAlg();
+        }
 #ifdef ENABLE_WIIUSE
         else if( !strcmp(argv[i], "--wii"))
         {
@@ -1125,7 +1125,6 @@ int handleCmdLine(int argc, char **argv)
         else if( !strcmp(argv[i], "--version")    || !strcmp(argv[i], "-v")) {}
         else if( !strcmp(argv[i], "--nbviews") && i+1<argc) { i++; }
         else if( !strcmp(argv[i], "--angle") && i+1<argc) { i++; }
-        else if( !strcmp(argv[i], "--shader")) {}
 #ifdef __APPLE__
         // on OS X, sometimes the Finder will pass a -psn* something parameter
         // to the application

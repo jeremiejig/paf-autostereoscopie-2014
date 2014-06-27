@@ -471,7 +471,7 @@ void IrrDriver::initDevice()
     m_post_processing = new PostProcessing(m_video_driver);
 
     // Initialize multi view rendering.
-    m_view_player = new ViewPlayer(m_device, UserConfigParams::m_nbviews, UserConfigParams::m_SVAlg, UserConfigParams::m_interocularDistance);
+    m_view_player = new ViewPlayer(m_device, UserConfigParams::m_nbviews, UserConfigParams::m_interocularDistance);
 
     if (UserConfigParams::m_nbviews == 8)
     {

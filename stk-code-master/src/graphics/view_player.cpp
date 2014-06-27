@@ -12,13 +12,14 @@
 #include <cmath>
 #include <string>
 
+bool ViewPlayer::m_SVAlg = false;
+
 // ShaderPath is for the pixel shader
-ViewPlayer::ViewPlayer(IrrlichtDevice *device, int nbViews, bool SVAlg, float interocularDistance, bool leftInterlacing, int viewsPerTexture) :
+ViewPlayer::ViewPlayer(IrrlichtDevice *device, int nbViews, float interocularDistance, bool leftInterlacing, int viewsPerTexture) :
                                                             m_device(device),
                                                             m_nbViews(nbViews),
                                                             m_3DOn(true),
                                                             m_interocularDistance(interocularDistance),
-                                                            m_SVAlg(SVAlg),
                                                             m_firstView(0),
                                                             m_viewsPerTexture(viewsPerTexture),
                                                             m_leftInterlacing(leftInterlacing),
